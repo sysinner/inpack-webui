@@ -1,0 +1,11 @@
+.lps-font-mono {
+	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+	font-size: 1em;
+}
+
+.lps-toolbar-qry-input {
+    padding-left: 30px !important;
+    background: url(../img/search-16.png) no-repeat 8px; 
+    width: 200px;
+}
+

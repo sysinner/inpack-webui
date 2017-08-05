@@ -1,0 +1,108 @@
+<div id="lps-channel-set-alert" class="alert alert-warning" style="display:none">
+  <p>Please setup at least one Channel (example: stable, beta ...)</p>
+  <br/>
+  <button class="btn btn-primary" onclick="lpLps.ChannelSet()">
+    Create new Channel
+  </button>
+</div>
+
+<div class="loscp-div-light">
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th id="lps-pkgls-ui-hname">Name</th>
+      <th>Version</th>
+      <th>Release</th>
+      <th>OS.Arch</th>
+      <th>
+        <div id="lps-pkgls-chans" class="dropdown">Channels</div>
+      </th>
+      <th>Size</th>
+      <th>Built</th>
+      <th>Updated</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="lps-pkgls"></tbody>
+</table>
+</div>
+
+<div id="lps-pkgls-empty-alert" class="alert alert-warning" style="display:none">
+  No more results ...
+</div>
+
+<script id="lps-pkgls-chans-tpl" type="text/html">
+<a class="dropdown-toggle" data-toggle="dropdown" href="#{[=it.qry_chanid]}">
+  <span id="lps-pkgls-qry-chanvalue">{[=it.qry_chanvalue]}</span> <span class="caret"></span>
+</a>  
+<ul class="dropdown-menu">
+  <li>
+    <a class="chan-item" href="#" label="Channels"
+      onclick="_lps_pkgls_chanselect()">
+      All Channels
+    </a>
+  </li>
+  {[~it.channels :v]}
+  <li>
+    <a class="chan-item" href="#{[=v.meta.id]}"
+  	onclick="_lps_pkgls_chanselect('{[=v.meta.id]}', '{[=v.meta.name]}')">
+      {[=v.vendor_name]} / {[=v.meta.name]}
+    </a>
+  </li>
+  {[~]}
+</ul>
+</script>
+
+<script id="lps-pkgls-tpl" type="text/html">
+{[~it.items :v]}
+<tr>
+  {[if (!it._pkgactive) {]}
+  <td class="lps-font-mono">{[=v.meta.name]}</td>
+  {[}]}
+  <td>{[=v.version]}</td>
+  <td>{[=v.release]}</td>
+  <td class="lps-font-mono">{[=v.pkg_os]}.{[=v.pkg_arch]}</td>
+  <td>
+  {[~it.channels :cv]}
+    {[if (cv.meta.id == v.channel) {]}
+      {[=cv.meta.name]}
+    {[}]}
+  {[~]}
+  </td>
+  <td>{[=lpLps.UtilResourceSizeFormat(v.pkg_size, 2)]}</td>
+  <td>{[=l4i.MetaTimeParseFormat(v.built, "Y-m-d")]}</td>
+  <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d H:i:s")]}</td>
+  <td align="right">
+    <button onclick="lpLps.PackageSet('{[=v.meta.id]}')"
+      class="pure-button button-xsmall pure-button-primary">
+      Setting
+    </button>
+  </td>
+</tr>
+{[~]}
+</script>
+
+<script type="text/javascript">
+
+$("#lps-pkgls-qry").submit(function(event) {
+    event.preventDefault();
+    lpLps.PackageListRefresh("lps-pkgls");
+});
+
+function _lps_pkgls_chanselect(chan_id, chan_value)
+{
+    if (!chan_id) {
+        chan_id = "";
+    }
+    if (!chan_value) {
+        chan_value = "Channels";
+    }
+	lpLps.pkgls_qry_chanactive = chan_id;
+	lpLps.pkgls_qry_chanvalue = chan_value;
+
+    $("#lps-pkgls-qry-chanvalue").text(chan_value);
+
+    lpLps.PackageListRefresh();
+}
+
+</script>

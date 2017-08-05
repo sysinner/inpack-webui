@@ -1,0 +1,45 @@
+<div id="lps-channelset">loading</div>
+
+<script id="lps-channelset-tpl" type="text/html">
+<div class="panel panel-default">
+  <div class="panel-heading">{[=it.actionTitle]}</div>
+  <div class="panel-body">
+
+  <div id="lps-channelset-alert" class="alert alert-danger hide">...</div>
+
+  <input type="hidden" name="id" value="{[=it.channel.meta.id]}">
+
+  <div class="form-group">
+    <label>Channel Name</label>
+    <input type="text" name="name" class="form-control" placeholder="Enter Channel Name" value="{[=it.channel.meta.name]}">
+    <p class="help-block">Use a <strong>short</strong>, easily identifiable name. Example: Beta, Alpha, Stable...</p>
+  </div>
+
+  <div class="form-group">
+    <label>Vendor Name</label>
+    <input type="text" name="vendor_name" class="form-control" placeholder="Enter Vendor Name" value="{[=it.channel.vendor_name]}">
+    <p class="help-block">Company or organization name. Use a <strong>short</strong>, easily identifiable name</p>
+  </div>
+
+  <!-- <div class="form-group">
+    <label>Vendor Website URL</label>
+    <input type="text" name="vendor_site" class="form-control" placeholder="Enter Vendor Website URL" value="{[=it.channel.vendor_site]}">
+    <p class="help-block">The website url of your organization. Example: http://www.example.com</p>
+  </div>
+
+  <div class="form-group">
+    <label>Package Service URL</label>
+    <input type="text" name="vendor_api" class="form-control" placeholder="Enter Package Service URL" value="{[=it.channel.vendor_api]}">
+  </div> -->
+
+  <button type="submit" class="btn btn-primary" onclick="lpLps.ChannelSetCommit()">Save</button>
+
+  {[if (it.channel.pkgNum == 0) { ]}
+  <a href="#" onclick="lpLps.ChannelDelete('{[=it.channel.meta.id]}')" class="btn btn-default" style="margin-left:20px">Delete</a>
+  {[ } ]}
+
+  <a href="#" onclick="lpLps.ChannelListRefresh()" style="margin-left:20px">Cancel</a>
+
+  </div>
+</div>
+</script>

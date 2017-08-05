@@ -1,0 +1,130 @@
+<div id="lps-channel-set-alert" class="alert alert-warning" style="display:none">
+  <p>Please setup at least one Channel (example: stable, beta ...)</p>
+  <br/>
+  <button class="btn btn-primary" onclick="lpLps.ChannelSet()">
+    Create new Channel
+  </button>
+</div>
+
+<div id="lps-infols-alert"></div>
+
+<div class="loscp-div-light">
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th width="48px"></th>
+      <th>Name</th>
+      <th>Last Version</th>
+      <th>Versions</th>
+      <th>
+        <div id="lps-infols-grpnav" class="dropdown">Groups</div>
+      </th>
+      <th>Created</th>
+      <th>Updated</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody id="lps-infols"></tbody>
+</table>
+</div>
+
+<div id="lps-infols-empty-alert" class="alert alert-warning" style="display:none">
+  No more results ...
+</div>
+
+<script id="lps-infols-grpnav-tpl" type="text/html">
+<a class="dropdown-toggle" data-toggle="dropdown" href="#{[=it.qry_grpname]}">
+  <span id="lps-infols-qry-grpvalue">{[=it.qry_grpvalue]}</span> <span class="caret"></span>
+</a>
+<ul class="dropdown-menu">
+  <li><a class="grpnav-item" href="#" label="Groups" onclick="_lps_infols_grpselect()">All Groups</a></li>
+  {[~it.groups :v]}
+  <li>
+    <a class="grpnav-item" href="#{[=v.name]}"
+      onclick="_lps_infols_grpselect('{[=v.name]}', '{[=v.value]}')">
+      {[=v.value]}
+    </a>
+  </li>
+  {[~]}
+</ul>
+</script>
+
+<script id="lps-infols-tpl" type="text/html">
+{[~it.items :v]}
+<tr>
+  <td><img src="{[=it._api_url]}/pkg-info/ico?name={[=v.meta.name]}&type=11" width="32", height="32"></td>
+  <td>{[=v.meta.name]}</td>
+  <td>{[=v.last_version]}</td>
+  <td>
+    {[if (v.pkg_num) {]}
+    <button onclick="lpLps.PackageListRefresh(null, '{[=v.meta.name]}')"
+      class="loscp-btn loscp-btn-xsmall" style="width:50px;text-align:center">
+  	{[=v.pkg_num]}
+    </button>
+    {[}]}
+  </td>
+  <td>
+    {[~v.groups :vg]}
+      {[~it.groups :g]}
+      {[if (vg == g.name) {]}
+        <div>{[=g.value]}</div>
+      {[}]}
+      {[~]}
+    {[~]}
+  </td>
+  <td>{[=l4i.MetaTimeParseFormat(v.meta.created, "Y-m-d")]}</td>
+  <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d H:i:s")]}</td>
+  <td align="right">
+    <button onclick="lpLps.InfoSet('{[=v.meta.name]}')"
+      class="pure-button button-xsmall pure-button-primary">
+      <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Setting
+    </button>
+  </td>
+</tr>
+{[~]}
+</script>
+
+<script type="text/html" id="lps-infols-optools">
+<li>
+  <form id="lps-infols-qry" action="#" onsubmit="return lpLps.InfoListRefresh()" class="form-inlines">
+    <input id="lps-infols-qry-text" type="text"
+      class="form-control lps-toolbar-qry-input" 
+      placeholder="Press Enter to Search" 
+      value="">
+  </form>
+</li>
+<li class="loscp-btn loscp-btn-primary">
+  <a href="#" onclick="lpLps.PackageNew()">
+     Upload a New Package
+  </a>
+</li>
+
+</script>
+
+<script type="text/javascript">
+
+$("#lps-infols-qry").submit(function(event) {
+    event.preventDefault();
+    lpLps.InfoListRefresh();
+});
+
+function _lps_infols_grpselect(grp_name, grp_value)
+{
+    if (!grp_name) {
+        grp_name = "";
+    }
+    if (!grp_value) {
+        grp_value = "Groups";
+    }
+	lpLps.infols_qry_grpactive = grp_name;
+	lpLps.infols_qry_grpvalue = grp_value;
+
+    $("#lps-infols-qry-grpvalue").text(grp_value);
+
+    lpLps.InfoListRefresh();
+}
+
+</script>
+
+

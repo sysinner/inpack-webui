@@ -1,0 +1,56 @@
+
+<div class="panel panel-default">
+  <div class="panel-heading">Import Channels from Upstream Vendor</div>
+  <div class="panel-body">
+
+  <div id="p4e5v1" class="alert alert-danger hide">...</div>
+
+  <input type="hidden" name="channel" value="{{.channel.meta.id}}">
+
+  <div class="form-group">
+    <label>Package Service URL</label>
+    <input id="lps-channel-import-api" type="text" name="vendor_api" class="form-control" value="http://www.example.com:1779/pandora/ext/lps">
+  </div>
+
+  <div id="lps-channel-import"></div>
+
+  <a id="lps-channel-import-btn" href="#" class="btn btn-primary" onclick="lpLps.ChannelImportConfirm()">Next</a>
+
+  <a href="#" onclick="lpLps.ChannelListRefresh()" style="margin-left:20px">Cancel</a>
+
+  </div>
+</div>
+
+<script id="lps-channel-import-tpl" type="text/html">
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th width="30px"></th>
+      <th>ID</th>
+      <th>Channel</th>
+      <th>Vendor</th>
+      <th>Packages</th>
+      <th>Updated</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {[~it.channels :v]}
+    <tr>
+      <td><input type="checkbox" name="lps-channel-import-ids" value="{[=v.meta.id]}" checked></td>
+      <td>{[=v.meta.id]}</td>
+      <td>{[=v.meta.name]}</td>
+      <td>
+        {[if (v.upstream == "1") { ]}
+        <a href="{[=v.vendor_site]}" target="_blank">{[=v.vendor_name]}</a></td>
+        {[ } else { ]}
+          {[=v.vendor_name]}
+        {[ } ]}
+      <td>{[=v.pkgNum]}</td>
+      <td>{[=v.meta.updated]}</td>
+      <td id="lps-channel-import-id-{[=v.meta.id]}"></td>
+    </tr>
+  {[~]}
+  </tbody>
+</table>
+</script>

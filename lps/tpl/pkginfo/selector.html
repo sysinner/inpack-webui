@@ -1,0 +1,138 @@
+
+<style type="text/css">
+.lps-infols-s6r-row:hover {
+    cursor: pointer;
+}
+</style>
+
+<table width="100%">
+  <tr>
+    <td>
+      <form id="lps-infols-s6r-qry" action="#" class="form-inlines">
+        <input id="lps-infols-s6r-qry-text" type="text"
+          class="form-control _list_query_input" 
+          placeholder="Press Enter to Search" 
+          value="">
+      </form>
+    </td>
+    <td align="right"></td>
+  </tr>
+</table>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Last Version</th>
+      <!-- <th>Versions</th> -->
+      <th>
+        <div id="lps-infols-s6r-grpnav" class="dropdown">Groups</div>
+      </th>
+      <th>Updated</th>
+      <th width="40px"></th>
+    </tr>
+  </thead>
+
+  <tbody id="lps-infols-s6r"></tbody>
+
+</table>
+
+<div id="lps-infols-s6r-empty-alert" class="alert alert-warning hide">No more results ...</div>
+
+
+<script id="lps-infols-s6r-grpnav-tpl" type="text/html">
+<a class="dropdown-toggle" data-toggle="dropdown" href="#{[=it.qry_grpname]}">
+  <span id="lps-infols-qry-grpvalue">{[=it.qry_grpvalue]}</span> <span class="caret"></span>
+</a>
+<ul class="dropdown-menu">
+  <li><a class="grpnav-item" href="#" label="Groups" onclick="_lps_infols_grpselect()">All Groups</a></li>
+  {[~it.groups :v]}
+  <li>
+    <a class="grpnav-item" href="#{[=v.name]}"
+      onclick="_lps_infols_grpselect('{[=v.name]}', '{[=v.value]}')">
+      {[=v.value]}
+    </a>
+  </li>
+  {[~]}
+</ul>
+</script>
+
+<script id="lps-infols-s6r-tpl" type="text/html">
+{[~it.items :v]}
+<tr class="lps-infols-s6r-row"
+  onclick="_lps_infols_pkgselect('{[=v.meta.name]}')"
+  lpspkg="{[=v.meta.name]}">
+  <td>{[=v.meta.name]}</td>
+  <td>{[=v.last_version]}</td>
+  <!-- <td>{[=v.pkg_num]}</td> -->
+  <td>
+    {[~v.groups :vg]}
+      {[~it.groups :g]}
+      {[if (vg == g.name) {]}
+        <div>{[=g.value]}</div>
+      {[}]}
+      {[~]}
+    {[~]}
+  </td>
+  <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d")]}</td>
+  <td align="center">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+  </td>
+</tr>
+{[~]}
+</script>
+
+<script type="text/javascript">
+
+$("#lps-infols-s6r-qry").submit(function(event) {
+    event.preventDefault();
+    lpLps.InfoListRefresh("lps-infols-s6r");
+});
+
+// $("#lps-infols-s6r").on("click", ".lps-infols-s6r-row", function() {
+function _lps_infols_pkgselect(name)
+{
+    // var name = $(this).attr("lpspkg");
+
+    l4iModal.Open({
+        id     : "lps-infols-s6r-pkgls",
+        title  : "Select a Package to Launch",
+        tpluri : "/lps/-/pkg/selector.html",
+        fn_selector : l4iModal.CurOptions.fn_selector,
+        success: function() {
+            // $("#lps-pkgls-s6r-qry-name").val(name);
+            lpLps.PackageListRefresh("lps-pkgls-s6r", name);
+        },
+        buttons : [
+            {
+                onclick: "l4iModal.Close()",
+                title: "Close",
+            },
+        ],
+    })
+}
+//});
+
+function _lps_infols_grpselect(grp_name, grp_value)
+{
+    if (!grp_name) {
+        grp_name = "";
+    }
+    if (!grp_value) {
+        grp_value = "Groups";
+    }
+    lpLps.infols_qry_grpactive = grp_name;
+    lpLps.infols_qry_grpvalue = grp_value;
+
+    $("#lps-infols-s6r-qry-grpvalue").text(grp_value);
+
+    lpLps.InfoListRefresh();
+}
+
+var lpsInfoLsS6r = [
+    "/lps/~/lps/js/main.js",
+];
+seajs.use(lpsInfoLsS6r, function() {
+    lpLps.InfoListRefresh("lps-infols-s6r");
+});
+</script>
