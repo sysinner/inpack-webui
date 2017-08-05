@@ -32,6 +32,42 @@
     <input type="text" name="vendor_api" class="form-control" placeholder="Enter Package Service URL" value="{[=it.channel.vendor_api]}">
   </div> -->
 
+  <div class="l4i-form-group">
+    <label>Readable Roles</label>
+    <div>
+      <span style="margin-right:10px">
+        <input type="checkbox" name="" value="0" checked="checked" disabled> Owner
+      </span>
+      {[~it.channel._roles :v]}
+      <span style="margin-right:10px">
+        {[if (v.read_checked) {]}
+        <input type="checkbox" name="roles_read" value="{[=v.id]}" checked="checked"> {[=v.name]}
+        {[} else {]}
+        <input type="checkbox" name="roles_read" value="{[=v.id]}"> {[=v.name]}
+        {[}]}
+      </span>
+      {[~]}
+    </div>
+  </div>
+
+  <div class="l4i-form-group">
+    <label>Writable Roles</label>
+    <div>
+      <span style="margin-right:10px">
+        <input type="checkbox" name="" value="0" checked="checked" disabled> Owner
+      </span>
+      {[~it.channel._roles :v]}
+      <span style="margin-right:10px">
+        {[if (v.write_checked) {]}
+        <input type="checkbox" name="roles_write" value="{[=v.id]}" checked="checked"> {[=v.name]}
+        {[} else {]}
+        <input type="checkbox" name="roles_write" value="{[=v.id]}"> {[=v.name]}
+        {[}]}
+      </span>
+      {[~]}
+    </div>
+  </div>
+
   <button type="submit" class="btn btn-primary" onclick="lpLps.ChannelSetCommit()">Save</button>
 
   {[if (it.channel.pkgNum == 0) { ]}

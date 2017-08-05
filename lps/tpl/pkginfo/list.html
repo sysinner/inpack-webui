@@ -8,25 +8,7 @@
 
 <div id="lps-infols-alert"></div>
 
-<div class="loscp-div-light">
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th width="48px"></th>
-      <th>Name</th>
-      <th>Last Version</th>
-      <th>Versions</th>
-      <th>
-        <div id="lps-infols-grpnav" class="dropdown">Groups</div>
-      </th>
-      <th>Created</th>
-      <th>Updated</th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody id="lps-infols"></tbody>
-</table>
+<div id="lps-infols" class="loscp-div-light">
 </div>
 
 <div id="lps-infols-empty-alert" class="alert alert-warning" style="display:none">
@@ -34,15 +16,15 @@
 </div>
 
 <script id="lps-infols-grpnav-tpl" type="text/html">
-<a class="dropdown-toggle" data-toggle="dropdown" href="#{[=it.qry_grpname]}">
+<a class="dropdown-toggle" data-toggle="dropdown" href="#">
   <span id="lps-infols-qry-grpvalue">{[=it.qry_grpvalue]}</span> <span class="caret"></span>
 </a>
 <ul class="dropdown-menu">
-  <li><a class="grpnav-item" href="#" label="Groups" onclick="_lps_infols_grpselect()">All Groups</a></li>
+  <li><a class="grpnav-item" href="#" label="Groups" onclick="lpLps.InfoListGroupSelect()">All Groups</a></li>
   {[~it.groups :v]}
   <li>
     <a class="grpnav-item" href="#{[=v.name]}"
-      onclick="_lps_infols_grpselect('{[=v.name]}', '{[=v.value]}')">
+      onclick="lpLps.InfoListGroupSelect('{[=v.name]}', '{[=v.value]}')">
       {[=v.value]}
     </a>
   </li>
@@ -51,16 +33,34 @@
 </script>
 
 <script id="lps-infols-tpl" type="text/html">
+<table class="table table-hover">
+<thead>
+<tr>
+  <th width="48px"></th>
+  <th>Name</th>
+  <th>Last Version</th>
+  <th>Versions</th>
+  <th>
+    <div id="lps-infols-grpnav" class="dropdown">Groups</div>
+  </th>
+  <th>Created</th>
+  <th>Updated</th>
+  <th></th>
+</tr>
+</thead>
+<tbody>
 {[~it.items :v]}
 <tr>
-  <td><img src="{[=it._api_url]}/pkg-info/ico?name={[=v.meta.name]}&type=11" width="32", height="32"></td>
-  <td>{[=v.meta.name]}</td>
+  <td><img src="{[=it._api_url]}/pkg-info/ico?name={[=v.meta.name]}&type=11" width="32" height="32"></td>
+  <td>
+    <a href="#pkginfo/view" onclick="lpLps.InfoView('{[=v.meta.name]}')">{[=v.meta.name]}</a>
+  </td>
   <td>{[=v.last_version]}</td>
   <td>
     {[if (v.pkg_num) {]}
-    <button onclick="lpLps.PackageListRefresh(null, '{[=v.meta.name]}')"
+    <button onclick="lpLps.InfoPackageList('{[=v.meta.name]}')"
       class="loscp-btn loscp-btn-xsmall" style="width:50px;text-align:center">
-  	{[=v.pkg_num]}
+      {[=v.pkg_num]}
     </button>
     {[}]}
   </td>
@@ -76,16 +76,50 @@
   <td>{[=l4i.MetaTimeParseFormat(v.meta.created, "Y-m-d")]}</td>
   <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d H:i:s")]}</td>
   <td align="right">
+    {[if (lpLps.OpPermAllow(v.op_perm, lpLps.OpPermWrite)) {]}
     <button onclick="lpLps.InfoSet('{[=v.meta.name]}')"
       class="pure-button button-xsmall pure-button-primary">
       <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Setting
     </button>
+    {[}]}
   </td>
 </tr>
+{[~]}
+</tbody>
+</table>
+</script>
+
+<script id="lps-infols-th-tpl" type="text/html">
+{[~it.items :v]}
+<div class="lps-pkginfo-tile" onclick="lpLps.InfoView('{[=v.meta.name]}')">
+  <div class="subtitle ct-content" id="status-{[=v.meta.name]}"
+    style="background: url('{[=it._api_url]}/pkg-info/ico?name={[=v.meta.name]}&type=21&size=200') no-repeat center top; background-size: 200px 100px;">
+  </div>
+  <div class="status">
+    <div class="title">{[=v.meta.name]}</div>
+    Last Version: <strong>{[=v.last_version]}</strong> &nbsp;&nbsp;
+    Updated: <strong>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d")]}</strong>
+  </div>
+</div>
 {[~]}
 </script>
 
 <script type="text/html" id="lps-infols-optools">
+<li id="lps-infols-grpnav-th" style="display:none" class="dropdown hover_border">
+  <a href="#infols/group">
+    <span class="dropdown">Groups: all</span>
+  </a>
+</li>
+<li>
+  <a id="pkginfo-list-navstyle-th" href="#" onclick="lpLps.InfoListStyle('th')">
+    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+  </a>
+</li>
+<li>
+  <a id="pkginfo-list-navstyle-list" href="#" onclick="lpLps.InfoListStyle('list')">
+    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+  </a>
+</li>
 <li>
   <form id="lps-infols-qry" action="#" onsubmit="return lpLps.InfoListRefresh()" class="form-inlines">
     <input id="lps-infols-qry-text" type="text"
@@ -94,37 +128,11 @@
       value="">
   </form>
 </li>
-<li class="loscp-btn loscp-btn-primary">
+<!-- <li class="loscp-btn loscp-btn-primary">
   <a href="#" onclick="lpLps.PackageNew()">
-     Upload a New Package
+    Upload a New Package
   </a>
-</li>
-
-</script>
-
-<script type="text/javascript">
-
-$("#lps-infols-qry").submit(function(event) {
-    event.preventDefault();
-    lpLps.InfoListRefresh();
-});
-
-function _lps_infols_grpselect(grp_name, grp_value)
-{
-    if (!grp_name) {
-        grp_name = "";
-    }
-    if (!grp_value) {
-        grp_value = "Groups";
-    }
-	lpLps.infols_qry_grpactive = grp_name;
-	lpLps.infols_qry_grpvalue = grp_value;
-
-    $("#lps-infols-qry-grpvalue").text(grp_value);
-
-    lpLps.InfoListRefresh();
-}
-
+</li> -->
 </script>
 
 

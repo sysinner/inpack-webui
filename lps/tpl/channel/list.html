@@ -29,20 +29,24 @@
   <td>{[=v.packages]}</td>
   <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d")]}</td>
   <td align="right">
+    {[if (lpLps.Status.user_channel_write) {]}
     <button onclick="lpLps.ChannelSet('{[=v.meta.id]}')"
       class="pure-button button-xsmall pure-button-primary">
       <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Setting
-	</button>
+	  </button>
+    {[}]}
   </td>
 </tr>
 {[~]}
 </script>
 
 <script type="text/html" id="lps-channells-optools">
+{[if (lpLps.Status.user_channel_write) {]}
 <li class="loscp-btn loscp-btn-primary">
   <a href="#" onclick="lpLps.ChannelSet()">
     New Package Channel
   </a>
 </li>
+{[}]}
 </script>
 

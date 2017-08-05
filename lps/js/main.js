@@ -20,6 +20,17 @@ var lpLps = {
     pkgls_qry_chanvalue: "Channels",
     option_dstid: "comp-content",
     option_navpf: "lospack",
+    OpPermRead: 1 << 0,
+    OpPermWrite: 1 << 1,
+    OpPermCreate: 1 << 2,
+    OpPermDelete: 1 << 3,
+    OpPermList: 1 << 4,
+    Status: {
+        user_channel_write: false,
+    },
+    iamAppRoles: null,
+    nav_back: null,
+    pkginfo_list_optools_style: null,
 }
 
 lpLps.path = function(uri) {
@@ -34,6 +45,10 @@ lpLps.tplpath = function(uri) {
     return lpLps.base + "tpl/" + uri + ".html";
 }
 
+lpLps.OpPermAllow = function(p, perms) {
+    return ((perms & p) == perms);
+}
+
 lpLps.tplWorkLoader = function(uri) {
     l4i.Ajax(lpLps.tplpath(uri), {
         callback: function(err, data) {
@@ -46,10 +61,33 @@ lpLps.tplWorkLoader = function(uri) {
     })
 }
 
+lpLps.NavBack = function(fn) {
+
+    if (fn && typeof fn === "function") {
+        lpLps.nav_back = fn;
+        $("#lpscp-navbar-back").css({
+            "display": "block"
+        });
+        return;
+    }
+
+    if (lpLps.nav_back) {
+        lpLps.nav_back();
+        lpLps.nav_back = null;
+        $("#lpscp-navbar-back").css({
+            "display": "none"
+        });
+    }
+}
+
 lpLps.Index = function(options) {
 
     var divstr = "<div id='" + lpLps.option_navpf + "-module-navbar'>\
   <ul id='lpscp-navbar' class='" + lpLps.option_navpf + "-module-nav'>\
+    <li id='lpscp-navbar-back' style='display:none'><a class='l4i-nav-item primary' href='#lps/back' onclick='lpLps.NavBack()'>\
+      <span class='glyphicon glyphicon-menu-left' aria-hidden='true'></span> Back\
+      </a>\
+    </li>\
     <li><a class='l4i-nav-item' href='#lps/pkginfo'>Packages</a></li>\
     <li><a class='l4i-nav-item' href='#lps/channel'>Channels</a></li>\
   </ul>\
@@ -61,7 +99,6 @@ lpLps.Index = function(options) {
 
     if (!lpLps.nav_reged) {
         l4i.UrlEventRegister("lps/pkginfo", lpLps.InfoListRefresh, "lpscp-navbar");
-        // l4i.UrlEventRegister("lps/pkg", lpLps.PackageList, "lpscp-navbar");
         l4i.UrlEventRegister("lps/channel", lpLps.ChannelListRefresh, "lpscp-navbar");
         lpLps.nav_reged = true;
     }
@@ -69,8 +106,27 @@ lpLps.Index = function(options) {
     if (options && options.dstid) {
         lpLps.option_dstid = options.dstid;
     }
+    if (!lpLps.pkginfo_list_optools_style) {
+        lpLps.pkginfo_list_optools_style = l4iStorage.Get("pkginfo_list_optools_style");
+    }
 
-    l4i.UrlEventHandler("lps/pkginfo", true);
+    seajs.use(["ep"], function(EventProxy) {
+
+        var ep = EventProxy.create("info", function(info) {
+            if (info && info.user_channel_write === true) {
+                lpLps.Status.user_channel_write = true;
+            }
+            l4i.UrlEventHandler("lps/pkginfo", true);
+        });
+
+        ep.fail(function(err) {
+            alert("Network Abort, Please try again later");
+        });
+
+        l4i.Ajax(lpLps.apipath("status/info"), {
+            callback: ep.done("info"),
+        });
+    });
 }
 
 
@@ -98,7 +154,16 @@ lpLps.InfoListRefresh = function(tplid) {
                 if (tpl) {
                     $("#work-content").html(tpl);
                 }
-                losCp.OpToolsRefresh("#lps-infols-optools");
+
+                losCp.OpToolsRefresh("#lps-infols-optools", function() {
+                    if (lpLps.pkginfo_list_optools_style == "th") {
+                        $("#pkginfo-list-navstyle-list").removeClass("hover");
+                        $("#pkginfo-list-navstyle-th").addClass("hover");
+                    } else {
+                        $("#pkginfo-list-navstyle-list").addClass("hover");
+                        $("#pkginfo-list-navstyle-th").removeClass("hover");
+                    }
+                });
 
                 if (channels.error) {
                     return l4i.InnerAlert(alert_id, 'alert-danger', channels.error.message);
@@ -129,32 +194,65 @@ lpLps.InfoListRefresh = function(tplid) {
                         "display": "block"
                     });
                 }
-				for (var i in info.items) {
-					info.items[i]._ico_
-				}
+                for (var i in info.items) {
+                    if (!info.items[i].op_perm) {
+                        info.items[i].op_perm = 0;
+                    }
+                    var gs = [];
+                    for (var j in info.items[i].groups) {
+                        for (var k in groups.items) {
+                            if (info.items[i].groups[j] == groups.items[k].name) {
+                                gs.push(groups.items[k].value);
+                                break;
+                            }
+                        }
+                    }
+                    info.items[i]._groups_value = gs;
+                }
+
+                var list_cb = function() {
+                    var dstid_nav = tplid + "-grpnav";
+                    if (lpLps.pkginfo_list_optools_style == "th") {
+                        dstid_nav = tplid + "-grpnav-th";
+                        $("#lps-infols-grpnav-th").css({
+                            "display": "block"
+                        });
+                    } else {
+                        $("#lps-infols-grpnav-th").css({
+                            "display": "none"
+                        });
+                        $("#" + tplid + "-grpnav-th").empty();
+                    }
+                    var elem = document.getElementById(dstid_nav);
+                    if (elem && elem.innerHTML.length > 50) {
+                        return;
+                    }
+                    l4iTemplate.Render({
+                        dstid: dstid_nav,
+                        tplid: tplid + "-grpnav-tpl",
+                        data: {
+                            groups: groups.items,
+                            qry_grpname: lpLps.infols_qry_grpactive,
+                            qry_grpvalue: lpLps.infols_qry_grpvalue,
+                        },
+                    });
+                }
 
                 // refresh info list
+                var tplid_style = tplid + "-tpl";
+                if (lpLps.pkginfo_list_optools_style == "th") {
+                    tplid_style = tplid + "-th-tpl";
+                }
                 l4iTemplate.Render({
                     dstid: tplid,
-                    tplid: tplid + "-tpl",
+                    tplid: tplid_style,
                     data: {
-						_api_url: lpLps.api, 
+                        _api_url: lpLps.api,
                         items: info.items,
                         groups: groups.items,
                     },
+                    callback: list_cb,
                 });
-
-                // if (tpl) {
-                l4iTemplate.Render({
-                    dstid: tplid + "-grpnav",
-                    tplid: tplid + "-grpnav-tpl",
-                    data: {
-                        groups: groups.items,
-                        qry_grpname: lpLps.infols_qry_grpactive,
-                        qry_grpvalue: lpLps.infols_qry_grpvalue,
-                    },
-                });
-                // }
 
                 if (!lpLps.cc_channels) {
                     lpLps.cc_channels = channels;
@@ -196,6 +294,36 @@ lpLps.InfoListRefresh = function(tplid) {
             callback: ep.done("info"),
         });
     });
+}
+
+lpLps.InfoListStyle = function(s) {
+    if (!s || s == lpLps.pkginfo_list_optools_style) {
+        return;
+    }
+    lpLps.pkginfo_list_optools_style = s;
+    l4iStorage.Set("pkginfo_list_optools_style", s);
+    lpLps.InfoListRefresh();
+}
+
+lpLps.InfoPackageList = function(name) {
+    lpLps.NavBack(lpLps.InfoListRefresh);
+    lpLps.PackageListRefresh(null, name);
+}
+
+
+lpLps.InfoListGroupSelect = function(grp_name, grp_value) {
+    if (!grp_name) {
+        grp_name = "";
+    }
+    if (!grp_value) {
+        grp_value = "Groups";
+    }
+    lpLps.infols_qry_grpactive = grp_name;
+    lpLps.infols_qry_grpvalue = grp_value;
+
+    $("#lps-infols-qry-grpvalue").text(grp_value);
+
+    lpLps.InfoListRefresh();
 }
 
 lpLps.InfoSet = function(name) {
@@ -294,6 +422,73 @@ lpLps.InfoSetCommit = function() {
     });
 }
 
+lpLps.InfoView = function(name) {
+    seajs.use(["ep"], function(EventProxy) {
+
+        var ep = EventProxy.create("tpl", "data", "pkgs", "groups", function(tpl, data, pkgs, groups) {
+
+            if (!data || data.kind != "PackageInfo") {
+                return;
+            }
+
+            if (pkgs.items) {
+                data._packages = pkgs.items;
+            } else {
+                data._packages = [];
+            }
+
+            if (!data.description) {
+                data.description = "";
+            }
+            if (groups.items) {
+                data._groups = groups.items;
+            } else {
+                data._groups = [];
+            }
+            data._api_url = lpLps.api;
+
+            l4iModal.Open({
+                title: "Package Info",
+                width: 900,
+                height: 600,
+                tplsrc: tpl,
+                data: data,
+                buttons: [
+                    {
+                        onclick: "l4iModal.Close()",
+                        title: "Close",
+                    },
+                ],
+            });
+        });
+
+        ep.fail(function(err) {
+            alert("Network Abort, Please try again later");
+        });
+
+        l4i.Ajax(lpLps.apipath("pkg-info/entry?name=" + name), {
+            callback: ep.done("data"),
+        });
+
+        l4i.Ajax(lpLps.apipath("pkg/list?qry_pkgname=" + name), {
+            callback: ep.done("pkgs"),
+        });
+
+        if (lpLps.cc_groups && lpLps.cc_groups.items.length > 0) {
+            ep.emit("groups", lpLps.cc_groups);
+        } else {
+            l4i.Ajax(lpLps.apipath("group/list"), {
+                callback: ep.done("groups"),
+            });
+        }
+
+        l4i.Ajax(lpLps.tplpath("pkginfo/view"), {
+            callback: ep.done("tpl"),
+        });
+    });
+}
+
+
 lpLps.PackageNew = function() {
     seajs.use(["ep"], function(EventProxy) {
 
@@ -367,7 +562,6 @@ lpLps.PackageNewCommit = function() {
                     sumcheck: "sha1:TODO",
                     channel: $("#lps-pkgnew").find("select[name=channel]").val(),
                 }
-                // console.log(e.target.result);
 
                 l4i.Ajax(lpLps.apipath("pkg/commit"), {
                     method: "POST",
@@ -449,6 +643,7 @@ lpLps.PackageListRefresh = function(tplid, pkgname) {
                 if (tpl) {
                     $("#work-content").html(tpl);
                 }
+                losCp.OpToolsRefresh("#lps-pkgls-optools");
 
                 if (!pkgls || !pkgls.kind || pkgls.kind != "PackageList" || !pkgls.items) {
                     pkgls.items = [];
@@ -653,6 +848,12 @@ lpLps.ChannelListRefresh = function() {
                 if (!rsj.items[i].packages) {
                     rsj.items[i].packages = 0;
                 }
+                if (!rsj.items[i].roles) {
+                    rsj.items[i].roles = {
+                        read: [],
+                        write: [],
+                    }
+                }
             }
 
             $("#work-content").html(tpl);
@@ -710,7 +911,7 @@ lpLps.ChannelDelete = function(id) {
 lpLps.ChannelSet = function(id) {
     seajs.use(["ep"], function(EventProxy) {
 
-        var ep = EventProxy.create('tpl', 'data', function(tpl, rsj) {
+        var ep = EventProxy.create('tpl', 'data', 'roles', function(tpl, rsj, roles) {
 
             if (!rsj || rsj.error || !rsj.kind || rsj.kind != "PackageChannel") {
                 rsj = l4i.Clone(lpLps.channel_def);
@@ -718,6 +919,31 @@ lpLps.ChannelSet = function(id) {
 
             if (!rsj.pkgNum) {
                 rsj.pkgNum = 0;
+            }
+            if (!rsj.roles) {
+                rsj.roles = {};
+            }
+            if (!rsj.roles.read) {
+                rsj.roles.read = [];
+            }
+            if (!rsj.roles.write) {
+                rsj.roles.write = [];
+            }
+
+            rsj._roles = l4i.Clone(roles.items);
+            for (var i in rsj._roles) {
+                for (var j in rsj.roles.read) {
+                    if (rsj.roles.read[j] == rsj._roles[i].id) {
+                        rsj._roles[i].read_checked = true;
+                        break;
+                    }
+                }
+                for (var j in rsj.roles.write) {
+                    if (rsj.roles.write[j] == rsj._roles[i].id) {
+                        rsj._roles[i].write_checked = true;
+                        break;
+                    }
+                }
             }
 
             $("#work-content").html(tpl);
@@ -740,6 +966,23 @@ lpLps.ChannelSet = function(id) {
         l4i.Ajax(lpLps.tplpath("channel/set"), {
             callback: ep.done('tpl'),
         });
+
+        if (lpLps.iamAppRoles) {
+            ep.emit("roles", lpLps.iamAppRoles);
+        } else {
+            l4i.Ajax(losCp.base + "auth/app-role-list", {
+                callback: function(err, data) {
+                    if (err) {
+                        return alert(err);
+                    }
+                    if (!data.items || data.items.length < 1) {
+                        return alert("No Roles Data Found");
+                    }
+                    lpLps.iamAppRoles = data;
+                    ep.emit("roles", data);
+                },
+            });
+        }
 
         if (!id) {
             ep.emit('data', "");
@@ -768,9 +1011,32 @@ lpLps.ChannelSetCommit = function() {
         vendor_site: form.find("input[name=vendor_site]").val(),
         vendor_name: form.find("input[name=vendor_name]").val(),
         vendor_api: form.find("input[name=vendor_api]").val(),
+        roles: {
+            read: [],
+            write: [],
+        },
     }
 
     var alertid = "#lps-channelset-alert";
+    try {
+
+        form.find("input[name=roles_read]:checked").each(function() {
+            var val = parseInt($(this).val());
+            if (val > 1) {
+                req.roles.read.push(val);
+            }
+        });
+
+        form.find("input[name=roles_write]:checked").each(function() {
+            var val = parseInt($(this).val());
+            if (val > 1) {
+                req.roles.write.push(val);
+            }
+        });
+
+    } catch (err) {
+        return l4i.InnerAlert(alert_id, 'alert-danger', err);
+    }
 
     l4i.Ajax(lpLps.apipath("channel/set"), {
         method: "POST",
@@ -790,7 +1056,7 @@ lpLps.ChannelSetCommit = function() {
             window.setTimeout(function() {
                 lpLps.cc_channels = null;
                 lpLps.ChannelListRefresh();
-            }, 2000);
+            }, 1000);
         },
     });
 }

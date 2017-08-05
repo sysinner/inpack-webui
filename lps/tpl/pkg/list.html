@@ -73,13 +73,18 @@
   <td>{[=l4i.MetaTimeParseFormat(v.built, "Y-m-d")]}</td>
   <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d H:i:s")]}</td>
   <td align="right">
+    {[if (lpLps.OpPermAllow(v.op_perm, lpLps.OpPermWrite)) {]}
     <button onclick="lpLps.PackageSet('{[=v.meta.id]}')"
       class="pure-button button-xsmall pure-button-primary">
       Setting
     </button>
+    {[}]}
   </td>
 </tr>
 {[~]}
+</script>
+
+<script type="text/html" id="lps-pkgls-optools">
 </script>
 
 <script type="text/javascript">

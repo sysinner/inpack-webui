@@ -1,0 +1,111 @@
+<style>
+.lps_pkgview_p5 td {
+	padding: 4px 0;
+}
+.lps_pkgview_p5 td.title {
+	width: 190px;
+	padding-right: 20px !important;
+	font-weight: bold;
+	text-align: right;
+}
+.lps_pkgview_p5 .logo_ico {
+	border: #ccc 1px solid;
+}
+</style>
+
+<table class="lps_pkgview_p5" width="100%">
+
+<tr>
+  <td class="title">Name / Packager</td>
+  <td>{[=it.meta.name]} / {[=it.meta.user]}</td>
+</tr>
+
+<tr>
+  <td class="title">Created / Updated</td>
+  <td>
+    {[=l4i.MetaTimeParseFormat(it.meta.created, "Y-m-d")]} / 
+    {[=l4i.MetaTimeParseFormat(it.meta.updated, "Y-m-d")]}
+  </td>
+</tr>
+
+<tr>
+  <td class="title">Groups</td>
+  <td>
+  {[~it.groups :vg]}
+    {[~it._groups :g]}
+    {[if (vg == g.name) {]}
+      <div>{[=g.value]}</div>
+    {[}]}
+    {[~]}
+  {[~]}
+  </td>
+</tr>
+
+
+<tr>
+  <td class="title">Logo</td>
+  <td>
+    <table width="80%">
+      <tr>
+        <td width="40%">
+          <img class="logo_ico" src="{[=it._api_url]}/pkg-info/ico?name={[=it.meta.name]}&type=11&size=96" width="96", height="96">
+		  1 x 1
+        </td>
+        <td>
+          <img class="logo_ico" src="{[=it._api_url]}/pkg-info/ico?name={[=it.meta.name]}&type=21&size=192" width="192", height="96">
+		  2 x 1
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+{[? it.homepage]}
+<tr>
+  <td class="title">Homepage</td>
+  <td>{[=it.homepage]}</td>
+</tr>
+{[?]}
+
+
+{[? it.description]}
+<tr>
+  <td class="title">Description</td>
+  <td>{[=it.description]}</td>
+</tr>
+{[?]}
+
+
+{[if (it._packages.length > 0) {]}
+<tr>
+  <td class="title">Packages</td>
+
+  <td id="lps-lpmls">
+    <table class="table table-hover">
+      <thead><tr>
+        <th>Version</th>
+        <th>Release</th>
+        <th>OS / Arch</th>
+        <th>Size</th>
+        <th>Built</th>
+      </tr></thead>
+      <tbody>
+      {[~it._packages :v]}
+      <tr>
+        <td>{[=v.version]}</td>
+        <td>{[=v.release]}</td>
+        <td>{[=v.pkg_os]} / {[=v.pkg_arch]}</td>
+        <td>{[=lpLps.UtilResourceSizeFormat(v.pkg_size, 2)]}</td>
+        <td>{[=l4i.MetaTimeParseFormat(v.built, "Y-m-d")]}</td>
+      </tr>
+      {[~]}
+      </tbody>
+    </table>
+  </td>
+</tr>
+{[}]}
+
+
+</table>
+

@@ -1,11 +1,68 @@
 .lps-font-mono {
-	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-	font-size: 1em;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 1em;
 }
 
 .lps-toolbar-qry-input {
-    padding-left: 30px !important;
-    background: url(../img/search-16.png) no-repeat 8px; 
-    width: 200px;
+  padding-left: 30px !important;
+  background: url(../img/search-16.png) no-repeat 8px;
+  width: 200px;
 }
 
+.lps-pkginfo-tile {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  float: left;
+  padding: 0;
+  cursor: pointer;
+  background-color: #ECF0F1;
+  box-shadow: inset 0px 0px 1px #FFFFCC;
+  width: 300px;
+  height: 170px;
+  margin: 0 20px 20px 0;
+}
+
+.lps-pkginfo-tile:hover {
+  outline: #BDC3C7 solid 3px;
+}
+
+.lps-pkginfo-tile .ct-content {
+  position: absolute;
+  left: 50px;
+  top: 5px;
+  font-size: 26px;
+  font-weight: bold;
+  padding: 20px;
+  width: 200px;
+  height: 100px;
+  text-align: center;
+}
+
+.lps-pkginfo-tile .ct-label {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 18px;
+}
+
+.lps-pkginfo-tile .status {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 10px;
+  font-size: 11px;
+  background-color: rgba(0, 0, 0, 0.07);
+  text-align: center;
+}
+
+.lps-pkginfo-tile .title {
+  font-size: 18px;
+  padding: 2px 0;
+  font-weight: bold;
+  line-height: 100%;
+}
