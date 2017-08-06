@@ -7,12 +7,14 @@
 
   <div id="lps-channelset-alert" class="alert alert-danger hide">...</div>
 
-  <input type="hidden" name="id" value="{[=it.channel.meta.id]}">
-
   <div class="form-group">
     <label>Channel Name</label>
-    <input type="text" name="name" class="form-control" placeholder="Enter Channel Name" value="{[=it.channel.meta.name]}">
-    <p class="help-block">Use a <strong>short</strong>, easily identifiable name. Example: Beta, Alpha, Stable...</p>
+    {[if (it.channel.meta.name.length > 0) {]}
+    <input type="text" name="name" class="form-control" value="{[=it.channel.meta.name]}" readonly>
+    {[} else {]}
+    <input type="text" name="name" class="form-control" placeholder="Enter Channel Name" value="">
+    <p class="help-block">Use a <strong>short</strong>, easily identifiable name. Example: beta, alpha, stable...</p>
+    {[}]}
   </div>
 
   <div class="form-group">
@@ -71,7 +73,7 @@
   <button type="submit" class="btn btn-primary" onclick="lpLps.ChannelSetCommit()">Save</button>
 
   {[if (it.channel.pkgNum == 0) { ]}
-  <a href="#" onclick="lpLps.ChannelDelete('{[=it.channel.meta.id]}')" class="btn btn-default" style="margin-left:20px">Delete</a>
+  <a href="#" onclick="lpLps.ChannelDelete('{[=it.channel.meta.name]}')" class="btn btn-default" style="margin-left:20px">Delete</a>
   {[ } ]}
 
   <a href="#" onclick="lpLps.ChannelListRefresh()" style="margin-left:20px">Cancel</a>

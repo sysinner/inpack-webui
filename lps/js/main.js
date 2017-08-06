@@ -13,11 +13,11 @@ var lpLps = {
     },
     cc_channels: null,
     cc_groups: null,
-    infols_qry_grpactive: "",
-    infols_qry_grpvalue: "Groups",
-    pkgls_qry_pkgactive: null,
-    pkgls_qry_chanactive: "",
-    pkgls_qry_chanvalue: "Channels",
+    infols_grpactive: "",
+    infols_grpvalue: "Groups",
+    pkgls_pkgactive: null,
+    pkgls_chanactive: "",
+    pkgls_chanvalue: "Channels",
     option_dstid: "comp-content",
     option_navpf: "lospack",
     OpPermRead: 1 << 0,
@@ -31,6 +31,7 @@ var lpLps = {
     iamAppRoles: null,
     nav_back: null,
     pkginfo_list_optools_style: null,
+    UserSession: null,
 }
 
 lpLps.path = function(uri) {
@@ -75,7 +76,7 @@ lpLps.NavBack = function(fn) {
         lpLps.nav_back();
         lpLps.nav_back = null;
         $("#lpscp-navbar-back").css({
-            "display": "none"
+            "display": "nono"
         });
     }
 }
@@ -130,19 +131,23 @@ lpLps.Index = function(options) {
 }
 
 
-lpLps.InfoListRefresh = function(tplid) {
+lpLps.InfoListRefresh = function(tplid, optools_off) {
+    $("#lpscp-navbar-back").css({
+        "display": "none"
+    });
     if (!tplid || tplid.indexOf("/") >= 0) {
         tplid = "lps-infols";
     }
-    var alert_id = "#lps-infols-alert",
-        uri = "";
+    var alert_id = "#" + tplid + "-alert",
+        uri = "?";
 
     if (document.getElementById(tplid)) {
-
-        uri += "?qry_text=" + $("#" + tplid + "-qry-text").val();
-
-        if (lpLps.infols_qry_grpactive && lpLps.infols_qry_grpactive != "") {
-            uri += "&qry_grpname=" + lpLps.infols_qry_grpactive;
+        var q = $("#" + tplid + "-qry-text").val();
+        if (q) {
+            uri += "q=" + q;
+        }
+        if (lpLps.infols_grpactive && lpLps.infols_grpactive != "") {
+            uri += "&group=" + lpLps.infols_grpactive;
         }
     }
 
@@ -155,15 +160,17 @@ lpLps.InfoListRefresh = function(tplid) {
                     $("#work-content").html(tpl);
                 }
 
-                losCp.OpToolsRefresh("#lps-infols-optools", function() {
-                    if (lpLps.pkginfo_list_optools_style == "th") {
-                        $("#pkginfo-list-navstyle-list").removeClass("hover");
-                        $("#pkginfo-list-navstyle-th").addClass("hover");
-                    } else {
-                        $("#pkginfo-list-navstyle-list").addClass("hover");
-                        $("#pkginfo-list-navstyle-th").removeClass("hover");
-                    }
-                });
+                if (!optools_off) {
+                    losCp.OpToolsRefresh("#lps-infols-optools", function() {
+                        if (lpLps.pkginfo_list_optools_style == "th") {
+                            $("#pkginfo-list-navstyle-list").removeClass("hover");
+                            $("#pkginfo-list-navstyle-th").addClass("hover");
+                        } else {
+                            $("#pkginfo-list-navstyle-list").addClass("hover");
+                            $("#pkginfo-list-navstyle-th").removeClass("hover");
+                        }
+                    });
+                }
 
                 if (channels.error) {
                     return l4i.InnerAlert(alert_id, 'alert-danger', channels.error.message);
@@ -179,6 +186,10 @@ lpLps.InfoListRefresh = function(tplid) {
                     return $("#" + tplid + "-empty-alert").css({
                         "display": "block"
                     });
+                }
+
+                if (!info || (!info.error && !info.kind)) {
+                    return l4i.InnerAlert(alert_id, 'alert-danger', "Network Error");
                 }
 
                 if (info.kind != "PackageInfoList" || !info.items) {
@@ -232,8 +243,8 @@ lpLps.InfoListRefresh = function(tplid) {
                         tplid: tplid + "-grpnav-tpl",
                         data: {
                             groups: groups.items,
-                            qry_grpname: lpLps.infols_qry_grpactive,
-                            qry_grpvalue: lpLps.infols_qry_grpvalue,
+                            grpname: lpLps.infols_grpactive,
+                            grpvalue: lpLps.infols_grpvalue,
                         },
                     });
                 }
@@ -318,8 +329,8 @@ lpLps.InfoListGroupSelect = function(grp_name, grp_value) {
     if (!grp_value) {
         grp_value = "Groups";
     }
-    lpLps.infols_qry_grpactive = grp_name;
-    lpLps.infols_qry_grpvalue = grp_value;
+    lpLps.infols_grpactive = grp_name;
+    lpLps.infols_grpvalue = grp_value;
 
     $("#lps-infols-qry-grpvalue").text(grp_value);
 
@@ -336,8 +347,8 @@ lpLps.InfoSet = function(name) {
             }
 
             // $("#work-content").html(tpl);
-            if (!data.description) {
-                data.description = "";
+            if (!data.project.description) {
+                data.project.description = "";
             }
 
             l4iModal.Open({
@@ -390,7 +401,9 @@ lpLps.InfoSetCommit = function() {
         meta: {
             name: form.find("input[name=name]").val(),
         },
-        description: form.find("textarea[name=description]").val(),
+        project: {
+            description: form.find("textarea[name=project_description]").val(),
+        },
     }
 
     l4i.Ajax(lpLps.apipath("pkg-info/set"), {
@@ -437,8 +450,8 @@ lpLps.InfoView = function(name) {
                 data._packages = [];
             }
 
-            if (!data.description) {
-                data.description = "";
+            if (!data.project.description) {
+                data.project.description = "";
             }
             if (groups.items) {
                 data._groups = groups.items;
@@ -448,7 +461,7 @@ lpLps.InfoView = function(name) {
             data._api_url = lpLps.api;
 
             l4iModal.Open({
-                title: "Package Info",
+                title: "Package Info : " + data.meta.name,
                 width: 900,
                 height: 600,
                 tplsrc: tpl,
@@ -470,7 +483,7 @@ lpLps.InfoView = function(name) {
             callback: ep.done("data"),
         });
 
-        l4i.Ajax(lpLps.apipath("pkg/list?qry_pkgname=" + name), {
+        l4i.Ajax(lpLps.apipath("pkg/list?name=" + name), {
             callback: ep.done("pkgs"),
         });
 
@@ -606,90 +619,92 @@ lpLps.PackageNewCommit = function() {
 }
 
 lpLps.PackageList = function() {
-    lpLps.pkgls_qry_pkgactive = null;
-    lpLps.pkgls_qry_chanactive = "";
-    lpLps.pkgls_qry_chanvalue = "Channels";
+    lpLps.pkgls_pkgactive = null;
+    lpLps.pkgls_chanactive = "";
+    lpLps.pkgls_chanvalue = "Channels";
     lpLps.PackageListRefresh();
 }
 
-lpLps.PackageListRefresh = function(tplid, pkgname) {
+lpLps.PackageListRefresh = function(tplid, pkgname, optools_off) {
     if (pkgname) {
-        lpLps.pkgls_qry_pkgactive = pkgname;
+        lpLps.pkgls_pkgactive = pkgname;
     }
 
     if (!tplid || tplid.indexOf("/") >= 0) {
         tplid = "lps-pkgls";
     }
-    var alert_id = "#lps-pkgls-alert",
+    var alert_id = "#" + tplid + "-alert",
         uri = "?";
-    if (lpLps.pkgls_qry_pkgactive) {
-        uri += "qry_pkgname=" + lpLps.pkgls_qry_pkgactive;
+    if (lpLps.pkgls_pkgactive) {
+        uri += "name=" + lpLps.pkgls_pkgactive;
     }
 
     if (document.getElementById(tplid)) {
-
-        uri += "&qry_text=" + $("#" + tplid + "-qry-text").val();
-
-        if (lpLps.pkgls_qry_chanactive && lpLps.pkgls_qry_chanactive != "") {
-            uri += "&qry_chanid=" + lpLps.pkgls_qry_chanactive;
+        var q = $("#" + tplid + "-qry-text").val();
+        if (q) {
+            uri += "&q=" + q;
+        }
+        if (lpLps.pkgls_chanactive && lpLps.pkgls_chanactive != "") {
+            uri += "&channel=" + lpLps.pkgls_chanactive;
         }
     }
 
     seajs.use(["ep"], function(EventProxy) {
 
-        var ep = EventProxy.create("tpl", "channels", "pkgls",
-            function(tpl, channels, pkgls) {
+        var ep = EventProxy.create("tpl", "channels", "pkgls", function(tpl, channels, pkgls) {
 
-                if (tpl) {
-                    $("#work-content").html(tpl);
-                }
+            if (tpl) {
+                $("#work-content").html(tpl);
+            }
+            if (!optools_off) {
                 losCp.OpToolsRefresh("#lps-pkgls-optools");
+            }
 
-                if (!pkgls || !pkgls.kind || pkgls.kind != "PackageList" || !pkgls.items) {
-                    pkgls.items = [];
-                }
+            if (!pkgls || !pkgls.kind || pkgls.kind != "PackageList" || !pkgls.items) {
+                pkgls.items = [];
+            }
 
-                if (pkgls.items.length > 0) {
-                    $("#" + tplid + "-empty-alert").css({
-                        "display": "none"
-                    });
-                } else {
-                    $("#" + tplid + "-empty-alert").css({
-                        "display": "block"
-                    });
-                }
+            if (pkgls.items.length > 0) {
+                $(alert_id).css({
+                    "display": "none"
+                });
+            } else {
+                $(alert_id).css({
+                    "display": "block"
+                });
+            }
 
-                if (lpLps.pkgls_qry_pkgactive) {
-                    $("#lps-pkgls-ui-hname").css({
-                        "display": "none"
-                    });
-                }
+            if (lpLps.pkgls_pkgactive) {
+                $("#lps-pkgls-ui-hname").css({
+                    "display": "none"
+                });
+            }
 
+            l4iTemplate.Render({
+                dstid: tplid,
+                tplid: tplid + "-tpl",
+                data: {
+                    _pkgactive: lpLps.pkgls_pkgactive,
+                    items: pkgls.items,
+                    channels: channels.items,
+                },
+            });
+
+            if (tpl) {
                 l4iTemplate.Render({
-                    dstid: tplid,
-                    tplid: tplid + "-tpl",
+                    dstid: tplid + "-chans",
+                    tplid: tplid + "-chans-tpl",
                     data: {
-                        _pkgactive: lpLps.pkgls_qry_pkgactive,
-                        items: pkgls.items,
                         channels: channels.items,
+                        chanactive: lpLps.pkgls_chanactive,
+                        chanvalue: lpLps.pkgls_chanvalue,
                     },
                 });
-
-                if (tpl) {
-                    l4iTemplate.Render({
-                        dstid: tplid + "-chans",
-                        tplid: tplid + "-chans-tpl",
-                        data: {
-                            channels: channels.items,
-                            qry_chanid: lpLps.pkgls_qry_chanactive,
-                            qry_chanvalue: lpLps.pkgls_qry_chanvalue,
-                        },
-                    });
-                }
-                if (!lpLps.cc_channels) {
-                    lpLps.cc_channels = channels;
-                }
-            });
+            }
+            if (!lpLps.cc_channels) {
+                lpLps.cc_channels = channels;
+            }
+        });
 
         ep.fail(function(err) {
             alert("Network Abort, Please try again later");
@@ -828,6 +843,9 @@ lpLps.PackageSetCommit = function() {
 
 
 lpLps.ChannelListRefresh = function() {
+    $("#lpscp-navbar-back").css({
+        "display": "none"
+    });
     seajs.use(["ep"], function(EventProxy) {
         var ep = EventProxy.create('tpl', 'data', function(tpl, rsj) {
 
@@ -844,9 +862,16 @@ lpLps.ChannelListRefresh = function() {
                 return;
             }
 
+            if (lpLps.UserSession && lpLps.UserSession.username == "sysadmin") {
+                rsj._stat_size_on = true
+            }
+
             for (var i in rsj.items) {
-                if (!rsj.items[i].packages) {
-                    rsj.items[i].packages = 0;
+                if (!rsj.items[i].stat_num) {
+                    rsj.items[i].stat_num = 0;
+                }
+                if (!rsj.items[i].stat_size) {
+                    rsj.items[i].stat_size = 0;
                 }
                 if (!rsj.items[i].roles) {
                     rsj.items[i].roles = {
@@ -862,9 +887,7 @@ lpLps.ChannelListRefresh = function() {
             l4iTemplate.Render({
                 dstid: "lps-channells",
                 tplid: "lps-channells-tpl",
-                data: {
-                    channels: rsj.items,
-                },
+                data: rsj,
             });
         });
 
@@ -883,8 +906,8 @@ lpLps.ChannelListRefresh = function() {
     });
 }
 
-lpLps.ChannelDelete = function(id) {
-    l4i.Ajax(lpLps.apipath("channel/delete?id=" + id), {
+lpLps.ChannelDelete = function(name) {
+    l4i.Ajax(lpLps.apipath("channel/delete?name=" + name), {
         callback: function(err, rsj) {
 
             if (!rsj || rsj.kind != "PackageChannel") {
@@ -908,7 +931,7 @@ lpLps.ChannelDelete = function(id) {
     });
 }
 
-lpLps.ChannelSet = function(id) {
+lpLps.ChannelSet = function(name) {
     seajs.use(["ep"], function(EventProxy) {
 
         var ep = EventProxy.create('tpl', 'data', 'roles', function(tpl, rsj, roles) {
@@ -917,8 +940,11 @@ lpLps.ChannelSet = function(id) {
                 rsj = l4i.Clone(lpLps.channel_def);
             }
 
-            if (!rsj.pkgNum) {
-                rsj.pkgNum = 0;
+            if (!rsj.stat_num) {
+                rsj.stat_num = 0;
+            }
+            if (!rsj.stat_size) {
+                rsj.stat_size = 0;
             }
             if (!rsj.roles) {
                 rsj.roles = {};
@@ -952,7 +978,7 @@ lpLps.ChannelSet = function(id) {
                 dstid: "lps-channelset",
                 tplid: "lps-channelset-tpl",
                 data: {
-                    actionTitle: ((rsj.meta.id == "") ? "New Package Channel" : "Setting Channel"),
+                    actionTitle: ((rsj.meta.name == "") ? "New Package Channel" : "Setting Channel"),
                     channel: rsj,
                 },
             });
@@ -984,10 +1010,10 @@ lpLps.ChannelSet = function(id) {
             });
         }
 
-        if (!id) {
+        if (!name) {
             ep.emit('data', "");
         } else {
-            l4i.Ajax(lpLps.apipath("channel/entry?id=" + id), {
+            l4i.Ajax(lpLps.apipath("channel/entry?name=" + name), {
                 callback: ep.done('data'),
             });
         }
@@ -1003,9 +1029,7 @@ lpLps.ChannelSetCommit = function() {
     }
 
     var req = {
-        kind: "Channel",
         meta: {
-            id: form.find("input[name=id]").val(),
             name: form.find("input[name=name]").val(),
         },
         vendor_site: form.find("input[name=vendor_site]").val(),
@@ -1083,8 +1107,11 @@ lpLps.ChannelImportConfirm = function() {
 
             for (var i in rsj.items) {
                 rsj.items[i].meta.updated = l4i.TimeParseFormat(rsj.items[i].meta.updated, "Y-m-d");
-                if (rsj.items[i].pkgNum === undefined) {
-                    rsj.items[i].pkgNum = 0;
+                if (!rsj.items[i].stat_num) {
+                    rsj.items[i].stat_num = 0;
+                }
+                if (!rsj.items[i].stat_size) {
+                    rsj.items[i].stat_size = 0;
                 }
             }
 
@@ -1097,9 +1124,12 @@ lpLps.ChannelImportConfirm = function() {
                     channels: rsj.items,
                 },
                 success: function() {
-                    $("#lps-channel-import-btn").text("Confirm and Save");
-                    $("#lps-channel-import-btn").attr("onclick", 'lpLps.ChannelImportSave()');
-                    $("#lps-channel-import-btn").removeAttr("disabled");
+                    var div = $("#lps-channel-import-btn");
+                    if (div) {
+                        div.text("Confirm and Save");
+                        div.attr("onclick", 'lpLps.ChannelImportSave()');
+                        div.removeAttr("disabled");
+                    }
                 },
             });
         },
@@ -1120,12 +1150,12 @@ lpLps.ChannelImportSave = function() {
 
         var channel = lpLps.channelImportArray[i];
 
-        if (chs.indexOf(channel.meta.id) < 0) {
+        if (chs.indexOf(channel.meta.name) < 0) {
             continue;
         }
 
         channel.kind = "PackageChannel";
-        var alertid = "#lps-channel-import-id-" + channel.meta.id;
+        var alertid = "#lps-channel-import-id-" + channel.meta.name;
 
         l4i.Ajax(lpLps.apipath("channel/set"), {
             method: "POST",

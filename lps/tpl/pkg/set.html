@@ -19,7 +19,7 @@
     <label>Select a Channel</label>
     <select class="l4i-form-control" name="channel">
     {[~it.channels.items :v]}
-      <option value="{[=v.meta.id]}" {[if (v.meta.id == it.pkg.channel) { ]}selected{[ } ]}>{[=v.vendor_name]} / {[=v.meta.name]}</option>
+      <option value="{[=v.meta.name]}" {[if (v.meta.name == it.pkg.channel) { ]}selected{[ } ]}>{[=v.vendor_name]} / {[=v.meta.name]}</option>
     {[~]}
     </select>
   </div>

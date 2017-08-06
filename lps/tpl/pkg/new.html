@@ -17,7 +17,7 @@
     <label>Select a Channel</label>
     <select class="form-control" name="channel">
     {[~it.channels :v]}
-      <option value="{[=v.meta.id]}">{[=v.vendor_name]} / {[=v.meta.name]}</option>
+      <option value="{[=v.meta.name]}">{[=v.vendor_name]} / {[=v.meta.name]}</option>
     {[~]}
     </select>
   </div>

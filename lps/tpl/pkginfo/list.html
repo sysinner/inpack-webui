@@ -8,16 +8,22 @@
 
 <div id="lps-infols-alert"></div>
 
-<div id="lps-infols" class="loscp-div-light">
-</div>
+<div id="lps-infols" class="loscp-div-light"></div>
 
 <div id="lps-infols-empty-alert" class="alert alert-warning" style="display:none">
   No more results ...
 </div>
 
+<style type="text/css">
+#lps-infols a.item_title {
+  font-size: 1.2em;
+  line-height: 100%;
+}
+</style>
+
 <script id="lps-infols-grpnav-tpl" type="text/html">
 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-  <span id="lps-infols-qry-grpvalue">{[=it.qry_grpvalue]}</span> <span class="caret"></span>
+  <span id="lps-infols-qry-grpvalue">{[=it.grpvalue]}</span> <span class="caret"></span>
 </a>
 <ul class="dropdown-menu">
   <li><a class="grpnav-item" href="#" label="Groups" onclick="lpLps.InfoListGroupSelect()">All Groups</a></li>
@@ -51,16 +57,16 @@
 <tbody>
 {[~it.items :v]}
 <tr>
-  <td><img src="{[=it._api_url]}/pkg-info/ico?name={[=v.meta.name]}&type=11" width="32" height="32"></td>
+  <td><img src="{[=it._api_url]}/pkg-info/ico?name={[=v.meta.name]}&type=11&size=64" width="26" height="26"></td>
   <td>
-    <a href="#pkginfo/view" onclick="lpLps.InfoView('{[=v.meta.name]}')">{[=v.meta.name]}</a>
+    <a href="#pkginfo/view" onclick="lpLps.InfoView('{[=v.meta.name]}')" class="item_title">{[=v.meta.name]}</a>
   </td>
   <td>{[=v.last_version]}</td>
   <td>
-    {[if (v.pkg_num) {]}
+    {[if (v.stat_num) {]}
     <button onclick="lpLps.InfoPackageList('{[=v.meta.name]}')"
       class="loscp-btn loscp-btn-xsmall" style="width:50px;text-align:center">
-      {[=v.pkg_num]}
+      {[=v.stat_num]}
     </button>
     {[}]}
   </td>

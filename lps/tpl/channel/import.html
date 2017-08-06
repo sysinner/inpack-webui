@@ -5,7 +5,7 @@
 
   <div id="p4e5v1" class="alert alert-danger hide">...</div>
 
-  <input type="hidden" name="channel" value="{{.channel.meta.id}}">
+  <input type="hidden" name="channel" value="{{.channel.meta.name}}">
 
   <div class="form-group">
     <label>Package Service URL</label>
@@ -26,7 +26,6 @@
   <thead>
     <tr>
       <th width="30px"></th>
-      <th>ID</th>
       <th>Channel</th>
       <th>Vendor</th>
       <th>Packages</th>
@@ -37,8 +36,7 @@
   <tbody>
   {[~it.channels :v]}
     <tr>
-      <td><input type="checkbox" name="lps-channel-import-ids" value="{[=v.meta.id]}" checked></td>
-      <td>{[=v.meta.id]}</td>
+      <td><input type="checkbox" name="lps-channel-import-ids" value="{[=v.meta.name]}" checked></td>
       <td>{[=v.meta.name]}</td>
       <td>
         {[if (v.upstream == "1") { ]}
@@ -48,7 +46,7 @@
         {[ } ]}
       <td>{[=v.pkgNum]}</td>
       <td>{[=v.meta.updated]}</td>
-      <td id="lps-channel-import-id-{[=v.meta.id]}"></td>
+      <td id="lps-channel-import-id-{[=v.meta.name]}"></td>
     </tr>
   {[~]}
   </tbody>
