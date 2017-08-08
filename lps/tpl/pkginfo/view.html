@@ -1,8 +1,8 @@
 <style>
 .lps_pkgview_p5 td {
-	padding: 4px 0;
+	padding: 5px 0;
 }
-.lps_pkgview_p5 td.title {
+.lps_pkgview_p5 td.row_title {
 	width: 190px;
 	padding-right: 20px !important;
 	font-weight: bold;
@@ -27,19 +27,19 @@
 <table class="lps_pkgview_p5" width="100%">
 
 <tr>
-  <td class="title">Maintainer</td>
+  <td class="row_title">Maintainer</td>
   <td>{[=it.meta.user]}</td>
 </tr>
 
 <tr>
-  <td class="title">Updated</td>
+  <td class="row_title">Updated</td>
   <td>
     {[=l4i.MetaTimeParseFormat(it.meta.updated, "Y-m-d")]}
   </td>
 </tr>
 
 <tr>
-  <td class="title">Groups</td>
+  <td class="row_title">Groups</td>
   <td>
   {[~it.groups :vg]}
     {[~it._groups :g]}
@@ -53,7 +53,7 @@
 
 
 <tr>
-  <td class="title">Logo</td>
+  <td class="row_title">Logo</td>
   <td>
     <table width="80%">
       <tr>
@@ -73,7 +73,7 @@
 
 {[? it.project.homepage]}
 <tr>
-  <td class="title">Homepage</td>
+  <td class="row_title">Homepage</td>
   <td><a href="{[=it.project.homepage]}" target="_blank">{[=it.project.homepage]}</a></td>
 </tr>
 {[?]}
@@ -81,7 +81,7 @@
 
 {[? it.project.description]}
 <tr>
-  <td class="title">Description</td>
+  <td class="row_title">Description</td>
   <td>{[=it.project.description]}</td>
 </tr>
 {[?]}
@@ -89,7 +89,7 @@
 
 {[if (it._packages.length > 0) {]}
 <tr>
-  <td class="title" valign="top">Packages</td>
+  <td class="row_title" valign="top">Packages</td>
 
   <td class="lps-lpmls">
     <table class="table table-hover">
@@ -99,7 +99,7 @@
         <th>Dist</th>
         <th style="text-align:center">Arch</th>
         <th style="text-align:right">Size</th>
-        <th></th>
+        <th style="text-align:right">Built</th>
       </tr></thead>
       <tbody>
       {[~it._packages :v]}

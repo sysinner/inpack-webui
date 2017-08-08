@@ -160,6 +160,15 @@ lpLps.InfoListRefresh = function(tplid, optools_off) {
                     $("#work-content").html(tpl);
                 }
 
+                if (!channels || !channels.items || channels.items.length < 1) {
+                    if (lpLps.user_channel_write === true) {
+                        return $("#lps-channel-set-alert").css({
+                            "display": "block"
+                        });
+                    }
+                    return l4i.InnerAlert(alert_id, 'alert-danger', "No available, or authorized channels can be accessed");
+                }
+
                 if (!optools_off) {
                     losCp.OpToolsRefresh("#lps-infols-optools", function() {
                         if (lpLps.pkginfo_list_optools_style == "th") {
@@ -169,16 +178,6 @@ lpLps.InfoListRefresh = function(tplid, optools_off) {
                             $("#pkginfo-list-navstyle-list").addClass("hover");
                             $("#pkginfo-list-navstyle-th").removeClass("hover");
                         }
-                    });
-                }
-
-                if (channels.error) {
-                    return l4i.InnerAlert(alert_id, 'alert-danger', channels.error.message);
-                }
-
-                if (!channels.items || channels.items.length < 1) {
-                    return $("#lps-channel-set-alert").css({
-                        "display": "block"
                     });
                 }
 
@@ -508,7 +507,6 @@ lpLps.PackageNew = function() {
         var ep = EventProxy.create("tpl", "channels", function(tpl, channels) {
 
             if (!channels.items || channels.items.length < 1) {
-                alert("Please setup at least one Channel");
                 return lpLps.ChannelSet();
             }
 
@@ -660,6 +658,10 @@ lpLps.PackageListRefresh = function(tplid, pkgname, optools_off) {
                 losCp.OpToolsRefresh("#lps-pkgls-optools");
             }
 
+            if (!channels || !channels.items) {
+                channels.items = [];
+            }
+
             if (!pkgls || !pkgls.kind || pkgls.kind != "PackageList" || !pkgls.items) {
                 pkgls.items = [];
             }
@@ -701,7 +703,7 @@ lpLps.PackageListRefresh = function(tplid, pkgname, optools_off) {
                     },
                 });
             }
-            if (!lpLps.cc_channels) {
+            if (!lpLps.cc_channels && channels.items.length > 0) {
                 lpLps.cc_channels = channels;
             }
         });
@@ -737,8 +739,11 @@ lpLps.PackageSet = function(id) {
 
         var ep = EventProxy.create("tpl", "channels", "pkg", function(tpl, channels, pkg) {
 
-            if (!pkg || pkg.kind != "Package"
-                || !channels || channels.kind != "PackageChannelList") {
+            if (!pkg || pkg.kind != "Package") {
+                return;
+            }
+
+            if (!channels.items || channels.items.length < 1) {
                 return;
             }
 
@@ -846,8 +851,12 @@ lpLps.ChannelListRefresh = function() {
     $("#lpscp-navbar-back").css({
         "display": "none"
     });
+    var alertid = "#lps-channells-alert";
+
     seajs.use(["ep"], function(EventProxy) {
         var ep = EventProxy.create('tpl', 'data', function(tpl, rsj) {
+
+            $("#work-content").html(tpl);
 
             if (!rsj) {
                 rsj = {};
@@ -858,8 +867,10 @@ lpLps.ChannelListRefresh = function() {
             }
 
             if (rsj.items.length < 1) {
-                lpLps.ChannelSet();
-                return;
+                if (lpLps.user_channel_write === true) {
+                    return lpLps.ChannelSet();
+                }
+                return l4i.InnerAlert(alertid, 'alert-danger', "No available, or authorized channels can be accessed");
             }
 
             if (lpLps.UserSession && lpLps.UserSession.username == "sysadmin") {
@@ -881,7 +892,6 @@ lpLps.ChannelListRefresh = function() {
                 }
             }
 
-            $("#work-content").html(tpl);
             losCp.OpToolsRefresh("#lps-channells-optools");
 
             l4iTemplate.Render({
@@ -912,7 +922,7 @@ lpLps.ChannelDelete = function(name) {
 
             if (!rsj || rsj.kind != "PackageChannel") {
                 var msg = "Bad Request";
-                if (rsj.error !== undefined) {
+                if (rsj.error) {
                     msg = rsj.error.message;
                 }
                 return l4i.InnerAlert("#p4e5v1", 'alert-danger', msg);
