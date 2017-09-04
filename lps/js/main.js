@@ -161,7 +161,7 @@ lpLps.InfoListRefresh = function(tplid, optools_off) {
                 }
 
                 if (!channels || !channels.items || channels.items.length < 1) {
-                    if (lpLps.user_channel_write === true) {
+                    if (lpLps.Status.user_channel_write === true) {
                         return $("#lps-channel-set-alert").css({
                             "display": "block"
                         });
@@ -867,7 +867,7 @@ lpLps.ChannelListRefresh = function() {
             }
 
             if (rsj.items.length < 1) {
-                if (lpLps.user_channel_write === true) {
+                if (lpLps.Status.user_channel_write === true) {
                     return lpLps.ChannelSet();
                 }
                 return l4i.InnerAlert(alertid, 'alert-danger', "No available, or authorized channels can be accessed");
