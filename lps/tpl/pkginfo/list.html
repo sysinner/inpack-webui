@@ -8,18 +8,11 @@
 
 <div id="lps-infols-alert"></div>
 
-<div id="lps-infols" class="loscp-div-light"></div>
+<div id="lps-infols"></div>
 
 <div id="lps-infols-empty-alert" class="alert alert-warning" style="display:none">
   No more results ...
 </div>
-
-<style type="text/css">
-#lps-infols a.item_title {
-  font-size: 1.2em;
-  line-height: 100%;
-}
-</style>
 
 <script id="lps-infols-grpnav-tpl" type="text/html">
 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -39,7 +32,7 @@
 </script>
 
 <script id="lps-infols-tpl" type="text/html">
-<table class="table table-hover">
+<table class="table table-hover loscp-div-light">
 <thead>
 <tr>
   <th width="48px"></th>
@@ -96,18 +89,26 @@
 </script>
 
 <script id="lps-infols-th-tpl" type="text/html">
+<ul class="lps-pkginfo-tiles">
 {[~it.items :v]}
-<div class="lps-pkginfo-tile" onclick="lpLps.InfoView('{[=v.meta.name]}')">
+<li class="lps-pkginfo-tile" onclick="lpLps.InfoView('{[=v.meta.name]}')">
   <div class="subtitle ct-content" id="status-{[=v.meta.name]}"
     style="background: url('{[=it._api_url]}/pkg-info/ico?name={[=v.meta.name]}&type=21&size=200') no-repeat center top; background-size: 200px 100px;">
   </div>
   <div class="status">
     <div class="title">{[=v.meta.name]}</div>
-    Last Version: <strong>{[=v.last_version]}</strong> &nbsp;&nbsp;
+    Version: <strong>{[=v.last_version]}</strong> &nbsp;&nbsp;
     Updated: <strong>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d")]}</strong>
   </div>
-</div>
+</li>
 {[~]}
+<li class="lps-pkginfo-tile"></li>
+<li class="lps-pkginfo-tile"></li>
+<li class="lps-pkginfo-tile"></li>
+<li class="lps-pkginfo-tile"></li>
+<li class="lps-pkginfo-tile"></li>
+<li class="lps-pkginfo-tile"></li>
+</ul>
 </script>
 
 <script type="text/html" id="lps-infols-optools">

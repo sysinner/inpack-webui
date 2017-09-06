@@ -13,18 +13,40 @@
   width: 200px;
 }
 
+
+#lps-infols a.item_title {
+  font-size: 1.2em;
+  line-height: 100%;
+}
+
+.lps-pkginfo-tiles {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+}
+
 .lps-pkginfo-tile {
   position: relative;
   overflow: hidden;
-  display: block;
-  float: left;
   padding: 0;
   cursor: pointer;
   background-color: #ECF0F1;
   box-shadow: inset 0px 0px 1px #FFFFCC;
   width: 300px;
   height: 170px;
-  margin: 0 20px 20px 0;
+  margin: 0 10px 20px 10px;
+  text-align: center;
+  flex: 1 0 300px;
+  box-sizing: border-box;
+}
+
+.lps-pkginfo-tile:empty {
+  height: 0;
+  border: none;
 }
 
 .lps-pkginfo-tile:hover {
@@ -32,13 +54,10 @@
 }
 
 .lps-pkginfo-tile .ct-content {
-  position: absolute;
-  left: 50px;
-  top: 5px;
+  text-align: center;
   font-size: 26px;
   font-weight: bold;
-  padding: 20px;
-  width: 200px;
+  padding: 10px;
   height: 100px;
   text-align: center;
 }
