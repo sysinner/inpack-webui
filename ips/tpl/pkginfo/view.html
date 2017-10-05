@@ -1,30 +1,30 @@
 <style>
-.lps_pkgview_p5 td {
+.ips_pkgview_p5 td {
 	padding: 5px 0;
 }
-.lps_pkgview_p5 td.row_title {
+.ips_pkgview_p5 td.row_title {
 	width: 190px;
 	padding-right: 20px !important;
 	font-weight: bold;
 	text-align: right;
 }
-.lps_pkgview_p5 .logo_ico {
+.ips_pkgview_p5 .logo_ico {
 	padding: 2px;
 	outline: #ccc 1px solid;
 }
-.lps_pkgview_p5 .lps-lpmls {
+.ips_pkgview_p5 .ips-ipmls {
 	padding-right: 5px;
 }
-.lps_pkgview_p5 .lps-lpmls td {
+.ips_pkgview_p5 .ips-ipmls td {
 	font-size: 0.9em;
 }
-.lps_pkgview_p5 .lps-lpmls th,
-.lps_pkgview_p5 .lps-lpmls td {
+.ips_pkgview_p5 .ips-ipmls th,
+.ips_pkgview_p5 .ips-ipmls td {
 	padding: 3px 0;
 }
 </style>
 
-<table class="lps_pkgview_p5" width="100%">
+<table class="ips_pkgview_p5" width="100%">
 
 <tr>
   <td class="row_title">Maintainer</td>
@@ -91,7 +91,7 @@
 <tr>
   <td class="row_title" valign="top">Packages</td>
 
-  <td class="lps-lpmls">
+  <td class="ips-ipmls">
     <table class="table table-hover">
       <thead><tr>
         <th>Version</th>
@@ -108,7 +108,7 @@
         <td>{[=v.version.release]}</td>
         <td>{[=v.version.dist]}</td>
 		    <td align="center">{[=v.version.arch]}</td>
-        <td align="right">{[=lpLps.UtilResourceSizeFormat(v.size, 2)]}</td>
+        <td align="right">{[=inpack.UtilResourceSizeFormat(v.size, 2)]}</td>
         <td align="right">{[=l4i.MetaTimeParseFormat(v.built, "Y-m-d")]}</td>
       </tr>
       {[~]}

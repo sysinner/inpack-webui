@@ -1,5 +1,5 @@
 <style type="text/css">
-.lps-infols-s6r-row:hover {
+.ips-infols-s6r-row:hover {
     cursor: pointer;
 }
 </style>
@@ -7,9 +7,9 @@
 <table width="100%">
   <tr>
     <td>
-      <form id="lps-infols-s6r-qry" action="#" class="form-inlines">
-        <input id="lps-infols-s6r-qry-text" type="text"
-          class="form-control lps-toolbar-qry-input-p100" 
+      <form id="ips-infols-s6r-qry" action="#" class="form-inlines">
+        <input id="ips-infols-s6r-qry-text" type="text"
+          class="form-control ips-toolbar-qry-input-p100" 
           placeholder="Press Enter to Search" 
           value="">
       </form>
@@ -17,21 +17,21 @@
   </tr>
 </table>
 
-<div id="lps-infols-s6r"></div>
+<div id="ips-infols-s6r"></div>
 
-<div id="lps-infols-s6r-alert" class="alert alert-warning hide">No more results ...</div>
+<div id="ips-infols-s6r-alert" class="alert alert-warning hide">No more results ...</div>
 
 
-<script id="lps-infols-s6r-grpnav-tpl" type="text/html">
+<script id="ips-infols-s6r-grpnav-tpl" type="text/html">
 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-  <span id="lps-infols-qry-grpvalue">{[=it.grpvalue]}</span> <span class="caret"></span>
+  <span id="ips-infols-qry-grpvalue">{[=it.grpvalue]}</span> <span class="caret"></span>
 </a>
 <ul class="dropdown-menu">
-  <li><a class="grpnav-item" href="#" label="Groups" onclick="_lps_infols_grpselect()">All Groups</a></li>
+  <li><a class="grpnav-item" href="#" label="Groups" onclick="_ips_infols_grpselect()">All Groups</a></li>
   {[~it.groups :v]}
   <li>
     <a class="grpnav-item" href="#{[=v.name]}"
-      onclick="_lps_infols_grpselect('{[=v.name]}', '{[=v.value]}')">
+      onclick="_ips_infols_grpselect('{[=v.name]}', '{[=v.value]}')">
       {[=v.value]}
     </a>
   </li>
@@ -39,14 +39,14 @@
 </ul>
 </script>
 
-<script id="lps-infols-s6r-tpl" type="text/html">
+<script id="ips-infols-s6r-tpl" type="text/html">
 <table class="table table-hover">
 <thead>
     <tr>
       <th>Name</th>
       <th>Last Version</th>
       <th>
-        <div id="lps-infols-s6r-grpnav" class="dropdown">Groups</div>
+        <div id="ips-infols-s6r-grpnav" class="dropdown">Groups</div>
       </th>
       <th>Updated</th>
       <th width="40px"></th>
@@ -54,9 +54,9 @@
 </thead>
 <tbody>
 {[~it.items :v]}
-<tr class="lps-infols-s6r-row"
-  onclick="_lps_infols_pkgselect('{[=v.meta.name]}')"
-  lpspkg="{[=v.meta.name]}">
+<tr class="ips-infols-s6r-row"
+  onclick="_ips_infols_pkgselect('{[=v.meta.name]}')"
+  ipspkg="{[=v.meta.name]}">
   <td>{[=v.meta.name]}</td>
   <td>{[=v.last_version]}</td>
   <td>
@@ -80,21 +80,21 @@
 
 <script type="text/javascript">
 
-$("#lps-infols-s6r-qry").submit(function(event) {
+$("#ips-infols-s6r-qry").submit(function(event) {
     event.preventDefault();
-    lpLps.InfoListRefresh("lps-infols-s6r", true);
+    inpack.InfoListRefresh("ips-infols-s6r", true);
 });
 
-function _lps_infols_pkgselect(name)
+function _ips_infols_pkgselect(name)
 {
     l4iModal.Open({
-        id     : "lps-infols-s6r-pkgls",
+        id     : "ips-infols-s6r-pkgls",
         title  : "Select a Package to Launch",
-        tpluri : "/los/cp/lps/~/lps/tpl/pkg/selector.html",
+        tpluri : "/in/cp/ips/~/ips/tpl/pkg/selector.html",
         fn_selector : l4iModal.CurOptions.fn_selector,
         success: function() {
-            // $("#lps-pkgls-s6r-qry-name").val(name);
-            lpLps.PackageListRefresh("lps-pkgls-s6r", name);
+            // $("#ips-pkgls-s6r-qry-name").val(name);
+            inpack.PackageListRefresh("ips-pkgls-s6r", name);
         },
         buttons : [
             {
@@ -105,7 +105,7 @@ function _lps_infols_pkgselect(name)
     })
 }
 
-function _lps_infols_grpselect(grp_name, grp_value)
+function _ips_infols_grpselect(grp_name, grp_value)
 {
     if (!grp_name) {
         grp_name = "";
@@ -113,14 +113,14 @@ function _lps_infols_grpselect(grp_name, grp_value)
     if (!grp_value) {
         grp_value = "Groups";
     }
-    lpLps.infols_grpactive = grp_name;
-    lpLps.infols_grpvalue = grp_value;
+    inpack.infols_grpactive = grp_name;
+    inpack.infols_grpvalue = grp_value;
 
-    $("#lps-infols-s6r-qry-grpvalue").text(grp_value);
+    $("#ips-infols-s6r-qry-grpvalue").text(grp_value);
 
-    lpLps.InfoListRefresh("lps-infols-s6r", true);
+    inpack.InfoListRefresh("ips-infols-s6r", true);
 }
 
-lpLps.pkginfo_list_optools_style = "list";
-lpLps.InfoListRefresh("lps-infols-s6r", true);
+inpack.pkginfo_list_optools_style = "list";
+inpack.InfoListRefresh("ips-infols-s6r", true);
 </script>

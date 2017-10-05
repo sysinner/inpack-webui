@@ -1,17 +1,17 @@
-<div id="lps-channel-set-alert" class="alert alert-warning hide">
+<div id="ips-channel-set-alert" class="alert alert-warning hide">
   <p>Please setup at least one Channel (example: stable, beta ...)</p>
   <br/>
-  <a class="btn btn-primary" href="#sysmgr/+/lps/channel-list" id="rwdx0i">Settings</a>
+  <a class="btn btn-primary" href="#sysmgr/+/ips/channel-list" id="rwdx0i">Settings</a>
 </div>
 
-<div id="lps-pkgnew">loading</div>
+<div id="ips-pkgnew">loading</div>
 
-<script id="lps-pkgnew-tpl" type="text/html">
+<script id="ips-pkgnew-tpl" type="text/html">
 <div class="panel panel-default">
   <div class="panel-heading">Upload a New Package</div>
   <div class="panel-body">
 
-  <div id="lps-pkgnew-alert" class="alert alert-danger hide">...</div>
+  <div id="ips-pkgnew-alert" class="alert alert-danger hide">...</div>
 
   <div class="form-group">
     <label>Select a Channel</label>
@@ -24,12 +24,12 @@
 
   <div class="form-group">
     <label>Select a package file to commit</label>
-    <input type="file" id="lps-pkgnew-file">
+    <input type="file" id="ips-pkgnew-file">
   </div>
 
-  <a href="#" onclick="lpLps.PackageNewCommit()" class="btn btn-primary">Submit</a>
+  <a href="#" onclick="inpack.PackageNewCommit()" class="btn btn-primary">Submit</a>
 
-  <a href="#" onclick="lpLps.InfoListRefresh()" style="margin-left:20px">Cancel</a>
+  <a href="#" onclick="inpack.InfoListRefresh()" style="margin-left:20px">Cancel</a>
 
   </div>
 </div>

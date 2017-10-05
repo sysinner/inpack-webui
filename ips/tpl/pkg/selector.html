@@ -1,10 +1,10 @@
 <table width="100%">
   <tr>
     <td>
-      <form id="lps-pkgls-s6r-qry" action="#" class="form-inlines">
-        <input id="lps-pkgls-s6r-qry-name" type="hidden" value="">
-        <input id="lps-pkgls-s6r-qry-text" type="text"
-          class="form-control lps-toolbar-qry-input-p100" 
+      <form id="ips-pkgls-s6r-qry" action="#" class="form-inlines">
+        <input id="ips-pkgls-s6r-qry-name" type="hidden" value="">
+        <input id="ips-pkgls-s6r-qry-text" type="text"
+          class="form-control ips-toolbar-qry-input-p100" 
           placeholder="Press Enter to Search" 
           value="">
       </form>
@@ -21,19 +21,19 @@
       <th>Dist</th>
       <th>Arch</th>
       <th>
-        <div id="lps-pkgls-s6r-chans" class="dropdown">Channel</div>
+        <div id="ips-pkgls-s6r-chans" class="dropdown">Channel</div>
       </th>
       <th></th>
     </tr>
   </thead>
 
-  <tbody id="lps-pkgls-s6r"></tbody>
+  <tbody id="ips-pkgls-s6r"></tbody>
 
 </table>
 
-<div id="lps-pkgls-s6r-alert" class="alert alert-warning hide">No more results ...</div>
+<div id="ips-pkgls-s6r-alert" class="alert alert-warning hide">No more results ...</div>
 
-<script id="lps-pkgls-s6r-tpl" type="text/html">
+<script id="ips-pkgls-s6r-tpl" type="text/html">
 {[~it.items :v]}
 <tr>
   <td>{[=v.meta.name]}</td>
@@ -49,27 +49,27 @@
     {[~]}
   </td>
   <td align="right">
-    <button class="btn btn-default btn-xs" onclick="_lps_pkgls_select_pkg('{[=v.meta.id]}')">Select</button>
+    <button class="btn btn-default btn-xs" onclick="_ips_pkgls_select_pkg('{[=v.meta.id]}')">Select</button>
   </td>
 </tr>
 {[~]}
 </script>
 
-<script id="lps-pkgls-s6r-chans-tpl" type="text/html">
+<script id="ips-pkgls-s6r-chans-tpl" type="text/html">
 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-  <span id="lps-pkgls-qry-chanvalue">{[=it.chanvalue]}</span> <span class="caret"></span>
+  <span id="ips-pkgls-qry-chanvalue">{[=it.chanvalue]}</span> <span class="caret"></span>
 </a>  
 <ul class="dropdown-menu">
   <li>
     <a class="chan-item" href="#" label="Channels"
-      onclick="_lps_pkgls_chanselect()">
+      onclick="_ips_pkgls_chanselect()">
       All Channels
     </a>
   </li>
   {[~it.channels :v]}
   <li>
     <a class="chan-item" href="#{[=v.meta.name]}"
-      onclick="_lps_pkgls_chanselect('{[=v.meta.name]}')">
+      onclick="_ips_pkgls_chanselect('{[=v.meta.name]}')">
       {[=v.vendor_name]} / {[=v.meta.name]}
     </a>
   </li>
@@ -79,29 +79,29 @@
 
 <script type="text/javascript">
 
-$("#lps-pkgls-s6r-qry").submit(function(event) {
+$("#ips-pkgls-s6r-qry").submit(function(event) {
     event.preventDefault();
-    lpLps.PackageListRefresh("lps-pkgls-s6r");
+    inpack.PackageListRefresh("ips-pkgls-s6r");
 });
 
-function _lps_pkgls_chanselect(chan_name, value)
+function _ips_pkgls_chanselect(chan_name, value)
 {
     if (!chan_name) {
         chan_name = "";
     }
-    lpLps.pkgls_chanactive = chan_name;
+    inpack.pkgls_chanactive = chan_name;
     if ((!value || value.length < 1) && chan_name.length < 1) {
-        lpLps.pkgls_chanvalue = "Channels";
+        inpack.pkgls_chanvalue = "Channels";
     } else {
-        lpLps.pkgls_chanvalue = chan_name;
+        inpack.pkgls_chanvalue = chan_name;
     }
 
-    $("#lps-pkgls-s6r-qry-chanvalue").text(lpLps.pkgls_chanvalue);
+    $("#ips-pkgls-s6r-qry-chanvalue").text(inpack.pkgls_chanvalue);
 
-    lpLps.PackageListRefresh();
+    inpack.PackageListRefresh();
 }
 
-function _lps_pkgls_select_pkg(id)
+function _ips_pkgls_select_pkg(id)
 {
     if (l4iModal.CurOptions.fn_selector) {
         l4iModal.CurOptions.fn_selector(null, id);

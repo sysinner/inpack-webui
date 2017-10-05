@@ -1,25 +1,25 @@
-.lps-font-mono {
+.ips-font-mono {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
   font-size: 1em;
 }
 
-.lps-toolbar-qry-input,
-.lps-toolbar-qry-input-p100 {
+.ips-toolbar-qry-input,
+.ips-toolbar-qry-input-p100 {
   padding-left: 30px !important;
   background: url(../img/search-16.png) no-repeat 8px;
 }
 
-.lps-toolbar-qry-input {
+.ips-toolbar-qry-input {
   width: 200px;
 }
 
 
-#lps-infols a.item_title {
+#ips-infols a.item_title {
   font-size: 1.2em;
   line-height: 100%;
 }
 
-.lps-pkginfo-tiles {
+.ips-pkginfo-tiles {
   position: absolute;
   left: 0px;
   right: 0px;
@@ -29,7 +29,7 @@
   list-style: none;
 }
 
-.lps-pkginfo-tile {
+.ips-pkginfo-tile {
   position: relative;
   overflow: hidden;
   padding: 0;
@@ -44,16 +44,16 @@
   box-sizing: border-box;
 }
 
-.lps-pkginfo-tile:empty {
+.ips-pkginfo-tile:empty {
   height: 0;
   border: none;
 }
 
-.lps-pkginfo-tile:hover {
+.ips-pkginfo-tile:hover {
   outline: #BDC3C7 solid 3px;
 }
 
-.lps-pkginfo-tile .ct-content {
+.ips-pkginfo-tile .ct-content {
   text-align: center;
   font-size: 26px;
   font-weight: bold;
@@ -62,7 +62,7 @@
   text-align: center;
 }
 
-.lps-pkginfo-tile .ct-label {
+.ips-pkginfo-tile .ct-label {
   position: absolute;
   bottom: 20px;
   left: 0;
@@ -71,7 +71,7 @@
   font-size: 18px;
 }
 
-.lps-pkginfo-tile .status {
+.ips-pkginfo-tile .status {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -83,7 +83,7 @@
   text-align: center;
 }
 
-.lps-pkginfo-tile .title {
+.ips-pkginfo-tile .title {
   font-size: 18px;
   padding: 2px 0;
   font-weight: bold;

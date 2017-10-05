@@ -1,14 +1,14 @@
-<div class="loscp-div-light">
+<div class="incp-div-light">
 <table class="table table-hover">
   <thead>
     <tr>
-      <th id="lps-pkgls-ui-hname">Name</th>
+      <th id="ips-pkgls-ui-hname">Name</th>
       <th>Version</th>
       <th>Release</th>
       <th>Dist</th>
       <th>Arch</th>
       <th>
-        <div id="lps-pkgls-chans" class="dropdown">Channels</div>
+        <div id="ips-pkgls-chans" class="dropdown">Channels</div>
       </th>
       <th>Size</th>
       <th>Built</th>
@@ -16,29 +16,29 @@
       <th></th>
     </tr>
   </thead>
-  <tbody id="lps-pkgls"></tbody>
+  <tbody id="ips-pkgls"></tbody>
 </table>
 </div>
 
-<div id="lps-pkgls-empty-alert" class="alert alert-warning" style="display:none">
+<div id="ips-pkgls-empty-alert" class="alert alert-warning" style="display:none">
   No more results ...
 </div>
 
-<script id="lps-pkgls-chans-tpl" type="text/html">
+<script id="ips-pkgls-chans-tpl" type="text/html">
 <a class="dropdown-toggle" data-toggle="dropdown" href="#{[=it.chanactive]}">
-  <span id="lps-pkgls-qry-chanvalue">{[=it.chanvalue]}</span> <span class="caret"></span>
+  <span id="ips-pkgls-qry-chanvalue">{[=it.chanvalue]}</span> <span class="caret"></span>
 </a>  
 <ul class="dropdown-menu">
   <li>
     <a class="chan-item" href="#" label="Channels"
-      onclick="_lps_pkgls_chanselect()">
+      onclick="_ips_pkgls_chanselect()">
       All Channels
     </a>
   </li>
   {[~it.channels :v]}
   <li>
     <a class="chan-item" href="#{[=v.meta.name]}"
-      onclick="_lps_pkgls_chanselect('{[=v.meta.name]}')">
+      onclick="_ips_pkgls_chanselect('{[=v.meta.name]}')">
       {[=v.vendor_name]} / {[=v.meta.name]}
     </a>
   </li>
@@ -46,11 +46,11 @@
 </ul>
 </script>
 
-<script id="lps-pkgls-tpl" type="text/html">
+<script id="ips-pkgls-tpl" type="text/html">
 {[~it.items :v]}
 <tr>
   {[if (!it._pkgactive) {]}
-  <td class="lps-font-mono">{[=v.meta.name]}</td>
+  <td class="ips-font-mono">{[=v.meta.name]}</td>
   {[}]}
   <td>{[=v.version.version]}</td>
   <td>{[=v.version.release]}</td>
@@ -63,12 +63,12 @@
     {[}]}
   {[~]}
   </td>
-  <td>{[=lpLps.UtilResourceSizeFormat(v.size, 2)]}</td>
+  <td>{[=inpack.UtilResourceSizeFormat(v.size, 2)]}</td>
   <td>{[=l4i.MetaTimeParseFormat(v.built, "Y-m-d")]}</td>
   <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d H:i:s")]}</td>
   <td align="right">
-    {[if (lpLps.OpPermAllow(v.op_perm, lpLps.OpPermWrite)) {]}
-    <button onclick="lpLps.PackageSet('{[=v.meta.id]}')"
+    {[if (inpack.OpPermAllow(v.op_perm, inpack.OpPermWrite)) {]}
+    <button onclick="inpack.PackageSet('{[=v.meta.id]}')"
       class="pure-button button-xsmall pure-button-primary">
       Setting
     </button>
@@ -78,31 +78,31 @@
 {[~]}
 </script>
 
-<script type="text/html" id="lps-pkgls-optools">
+<script type="text/html" id="ips-pkgls-optools">
 </script>
 
 <script type="text/javascript">
 
-$("#lps-pkgls-qry").submit(function(event) {
+$("#ips-pkgls-qry").submit(function(event) {
     event.preventDefault();
-    lpLps.PackageListRefresh("lps-pkgls");
+    inpack.PackageListRefresh("ips-pkgls");
 });
 
-function _lps_pkgls_chanselect(chan_name, value)
+function _ips_pkgls_chanselect(chan_name, value)
 {
     if (!chan_name) {
         chan_name = "";
     }
-    lpLps.pkgls_chanactive = chan_name;
+    inpack.pkgls_chanactive = chan_name;
     if ((!value || value.length < 1) && chan_name.length < 1) {
-        lpLps.pkgls_chanvalue = "Channels";
+        inpack.pkgls_chanvalue = "Channels";
     } else {
-        lpLps.pkgls_chanvalue = chan_name;
+        inpack.pkgls_chanvalue = chan_name;
     }
 
-    $("#lps-pkgls-qry-chanvalue").text(lpLps.pkgls_chanvalue);
+    $("#ips-pkgls-qry-chanvalue").text(inpack.pkgls_chanvalue);
 
-    lpLps.PackageListRefresh();
+    inpack.PackageListRefresh();
 }
 
 </script>

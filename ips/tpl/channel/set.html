@@ -1,11 +1,11 @@
-<div id="lps-channelset">loading</div>
+<div id="ips-channelset">loading</div>
 
-<script id="lps-channelset-tpl" type="text/html">
+<script id="ips-channelset-tpl" type="text/html">
 <div class="panel panel-default">
   <div class="panel-heading">{[=it.actionTitle]}</div>
   <div class="panel-body">
 
-  <div id="lps-channelset-alert" class="alert alert-danger hide">...</div>
+  <div id="ips-channelset-alert" class="alert alert-danger hide">...</div>
 
   <div class="form-group">
     <label>Channel Name</label>
@@ -70,13 +70,13 @@
     </div>
   </div>
 
-  <button type="submit" class="btn btn-primary" onclick="lpLps.ChannelSetCommit()">Save</button>
+  <button type="submit" class="btn btn-primary" onclick="inpack.ChannelSetCommit()">Save</button>
 
   {[if (it.channel.pkgNum == 0) { ]}
-  <a href="#" onclick="lpLps.ChannelDelete('{[=it.channel.meta.name]}')" class="btn btn-default" style="margin-left:20px">Delete</a>
+  <a href="#" onclick="inpack.ChannelDelete('{[=it.channel.meta.name]}')" class="btn btn-default" style="margin-left:20px">Delete</a>
   {[ } ]}
 
-  <a href="#" onclick="lpLps.ChannelListRefresh()" style="margin-left:20px">Cancel</a>
+  <a href="#" onclick="inpack.ChannelListRefresh()" style="margin-left:20px">Cancel</a>
 
   </div>
 </div>

@@ -1,10 +1,10 @@
-<div id="lps-channells-alert"></div>
+<div id="ips-channells-alert"></div>
 
-<div class="loscp-div-light">
-  <div id="lps-channells"></div>
+<div class="incp-div-light">
+  <div id="ips-channells"></div>
 </div>
 
-<script id="lps-channells-tpl" type="text/html">  
+<script id="ips-channells-tpl" type="text/html">  
 <table class="table table-hover">
 <thead>
   <tr>
@@ -31,12 +31,12 @@
   </td>
   <td>{[=v.stat_num]}</td>
   {[? it._stat_size_on]}
-  <td>{[=lpLps.UtilResourceSizeFormat(v.stat_size, 2)]}</td>
+  <td>{[=inpack.UtilResourceSizeFormat(v.stat_size, 2)]}</td>
   {[?]}
   <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d")]}</td>
   <td align="right">
-    {[if (lpLps.Status.user_channel_write) {]}
-    <button onclick="lpLps.ChannelSet('{[=v.meta.name]}')"
+    {[if (inpack.Status.user_channel_write) {]}
+    <button onclick="inpack.ChannelSet('{[=v.meta.name]}')"
       class="pure-button button-xsmall pure-button-primary">
       <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Setting
 	  </button>
@@ -48,10 +48,10 @@
 </table>
 </script>
 
-<script type="text/html" id="lps-channells-optools">
-{[if (lpLps.Status.user_channel_write) {]}
-<li class="loscp-btn loscp-btn-primary">
-  <a href="#" onclick="lpLps.ChannelSet()">
+<script type="text/html" id="ips-channells-optools">
+{[if (inpack.Status.user_channel_write) {]}
+<li class="incp-btn incp-btn-primary">
+  <a href="#" onclick="inpack.ChannelSet()">
     New Package Channel
   </a>
 </li>

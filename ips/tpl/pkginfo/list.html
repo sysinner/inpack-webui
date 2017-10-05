@@ -1,29 +1,29 @@
-<div id="lps-channel-set-alert" class="alert alert-warning" style="display:none">
+<div id="ips-channel-set-alert" class="alert alert-warning" style="display:none">
   <p>Please setup at least one Channel (example: stable, beta ...)</p>
   <br/>
-  <button class="btn btn-primary" onclick="lpLps.ChannelSet()">
+  <button class="btn btn-primary" onclick="inpack.ChannelSet()">
     Create new Channel
   </button>
 </div>
 
-<div id="lps-infols-alert"></div>
+<div id="ips-infols-alert"></div>
 
-<div id="lps-infols"></div>
+<div id="ips-infols"></div>
 
-<div id="lps-infols-empty-alert" class="alert alert-warning" style="display:none">
+<div id="ips-infols-empty-alert" class="alert alert-warning" style="display:none">
   No more results ...
 </div>
 
-<script id="lps-infols-grpnav-tpl" type="text/html">
+<script id="ips-infols-grpnav-tpl" type="text/html">
 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-  <span id="lps-infols-qry-grpvalue">{[=it.grpvalue]}</span> <span class="caret"></span>
+  <span id="ips-infols-qry-grpvalue">{[=it.grpvalue]}</span> <span class="caret"></span>
 </a>
 <ul class="dropdown-menu">
-  <li><a class="grpnav-item" href="#" label="Groups" onclick="lpLps.InfoListGroupSelect()">All Groups</a></li>
+  <li><a class="grpnav-item" href="#" label="Groups" onclick="inpack.InfoListGroupSelect()">All Groups</a></li>
   {[~it.groups :v]}
   <li>
     <a class="grpnav-item" href="#{[=v.name]}"
-      onclick="lpLps.InfoListGroupSelect('{[=v.name]}', '{[=v.value]}')">
+      onclick="inpack.InfoListGroupSelect('{[=v.name]}', '{[=v.value]}')">
       {[=v.value]}
     </a>
   </li>
@@ -31,8 +31,8 @@
 </ul>
 </script>
 
-<script id="lps-infols-tpl" type="text/html">
-<table class="table table-hover loscp-div-light">
+<script id="ips-infols-tpl" type="text/html">
+<table class="table table-hover incp-div-light">
 <thead>
 <tr>
   <th width="48px"></th>
@@ -40,7 +40,7 @@
   <th>Last Version</th>
   <th>Versions</th>
   <th>
-    <div id="lps-infols-grpnav" class="dropdown">Groups</div>
+    <div id="ips-infols-grpnav" class="dropdown">Groups</div>
   </th>
   <th>Created</th>
   <th>Updated</th>
@@ -52,13 +52,13 @@
 <tr>
   <td><img src="{[=it._api_url]}/pkg-info/ico?name={[=v.meta.name]}&type=11&size=64" width="26" height="26"></td>
   <td>
-    <a href="#pkginfo/view" onclick="lpLps.InfoView('{[=v.meta.name]}')" class="item_title">{[=v.meta.name]}</a>
+    <a href="#pkginfo/view" onclick="inpack.InfoView('{[=v.meta.name]}')" class="item_title">{[=v.meta.name]}</a>
   </td>
   <td>{[=v.last_version]}</td>
   <td>
     {[if (v.stat_num) {]}
-    <button onclick="lpLps.InfoPackageList('{[=v.meta.name]}')"
-      class="loscp-btn loscp-btn-xsmall" style="width:50px;text-align:center">
+    <button onclick="inpack.InfoPackageList('{[=v.meta.name]}')"
+      class="incp-btn incp-btn-xsmall" style="width:50px;text-align:center">
       {[=v.stat_num]}
     </button>
     {[}]}
@@ -75,8 +75,8 @@
   <td>{[=l4i.MetaTimeParseFormat(v.meta.created, "Y-m-d")]}</td>
   <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d H:i:s")]}</td>
   <td align="right">
-    {[if (lpLps.OpPermAllow(v.op_perm, lpLps.OpPermWrite)) {]}
-    <button onclick="lpLps.InfoSet('{[=v.meta.name]}')"
+    {[if (inpack.OpPermAllow(v.op_perm, inpack.OpPermWrite)) {]}
+    <button onclick="inpack.InfoSet('{[=v.meta.name]}')"
       class="pure-button button-xsmall pure-button-primary">
       <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Setting
     </button>
@@ -88,10 +88,10 @@
 </table>
 </script>
 
-<script id="lps-infols-th-tpl" type="text/html">
-<ul class="lps-pkginfo-tiles">
+<script id="ips-infols-th-tpl" type="text/html">
+<ul class="ips-pkginfo-tiles">
 {[~it.items :v]}
-<li class="lps-pkginfo-tile" onclick="lpLps.InfoView('{[=v.meta.name]}')">
+<li class="ips-pkginfo-tile" onclick="inpack.InfoView('{[=v.meta.name]}')">
   <div class="subtitle ct-content" id="status-{[=v.meta.name]}"
     style="background: url('{[=it._api_url]}/pkg-info/ico?name={[=v.meta.name]}&type=21&size=200') no-repeat center top; background-size: 200px 100px;">
   </div>
@@ -102,41 +102,41 @@
   </div>
 </li>
 {[~]}
-<li class="lps-pkginfo-tile"></li>
-<li class="lps-pkginfo-tile"></li>
-<li class="lps-pkginfo-tile"></li>
-<li class="lps-pkginfo-tile"></li>
-<li class="lps-pkginfo-tile"></li>
-<li class="lps-pkginfo-tile"></li>
+<li class="ips-pkginfo-tile"></li>
+<li class="ips-pkginfo-tile"></li>
+<li class="ips-pkginfo-tile"></li>
+<li class="ips-pkginfo-tile"></li>
+<li class="ips-pkginfo-tile"></li>
+<li class="ips-pkginfo-tile"></li>
 </ul>
 </script>
 
-<script type="text/html" id="lps-infols-optools">
-<li id="lps-infols-grpnav-th" style="display:none" class="dropdown hover_border">
+<script type="text/html" id="ips-infols-optools">
+<li id="ips-infols-grpnav-th" style="display:none" class="dropdown hover_border">
   <a href="#infols/group">
     <span class="dropdown">Groups: all</span>
   </a>
 </li>
 <li>
-  <a id="pkginfo-list-navstyle-th" href="#" onclick="lpLps.InfoListStyle('th')">
+  <a id="pkginfo-list-navstyle-th" href="#" onclick="inpack.InfoListStyle('th')">
     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
   </a>
 </li>
 <li>
-  <a id="pkginfo-list-navstyle-list" href="#" onclick="lpLps.InfoListStyle('list')">
+  <a id="pkginfo-list-navstyle-list" href="#" onclick="inpack.InfoListStyle('list')">
     <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
   </a>
 </li>
 <li>
-  <form id="lps-infols-qry" action="#" onsubmit="return lpLps.InfoListRefresh()" class="form-inlines">
-    <input id="lps-infols-qry-text" type="text"
-      class="form-control lps-toolbar-qry-input" 
+  <form id="ips-infols-qry" action="#" onsubmit="return inpack.InfoListRefresh()" class="form-inlines">
+    <input id="ips-infols-qry-text" type="text"
+      class="form-control ips-toolbar-qry-input" 
       placeholder="Press Enter to Search" 
       value="">
   </form>
 </li>
-<!-- <li class="loscp-btn loscp-btn-primary">
-  <a href="#" onclick="lpLps.PackageNew()">
+<!-- <li class="incp-btn incp-btn-primary">
+  <a href="#" onclick="inpack.PackageNew()">
     Upload a New Package
   </a>
 </li> -->

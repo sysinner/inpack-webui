@@ -9,19 +9,19 @@
 
   <div class="form-group">
     <label>Package Service URL</label>
-    <input id="lps-channel-import-api" type="text" name="vendor_api" class="form-control" value="http://www.example.com:1779/pandora/ext/lps">
+    <input id="ips-channel-import-api" type="text" name="vendor_api" class="form-control" value="http://www.example.com:1779/pandora/ext/ips">
   </div>
 
-  <div id="lps-channel-import"></div>
+  <div id="ips-channel-import"></div>
 
-  <a id="lps-channel-import-btn" href="#" class="btn btn-primary" onclick="lpLps.ChannelImportConfirm()">Next</a>
+  <a id="ips-channel-import-btn" href="#" class="btn btn-primary" onclick="inpack.ChannelImportConfirm()">Next</a>
 
-  <a href="#" onclick="lpLps.ChannelListRefresh()" style="margin-left:20px">Cancel</a>
+  <a href="#" onclick="inpack.ChannelListRefresh()" style="margin-left:20px">Cancel</a>
 
   </div>
 </div>
 
-<script id="lps-channel-import-tpl" type="text/html">
+<script id="ips-channel-import-tpl" type="text/html">
 <table class="table table-hover">
   <thead>
     <tr>
@@ -36,7 +36,7 @@
   <tbody>
   {[~it.channels :v]}
     <tr>
-      <td><input type="checkbox" name="lps-channel-import-ids" value="{[=v.meta.name]}" checked></td>
+      <td><input type="checkbox" name="ips-channel-import-ids" value="{[=v.meta.name]}" checked></td>
       <td>{[=v.meta.name]}</td>
       <td>
         {[if (v.upstream == "1") { ]}
@@ -46,7 +46,7 @@
         {[ } ]}
       <td>{[=v.pkgNum]}</td>
       <td>{[=v.meta.updated]}</td>
-      <td id="lps-channel-import-id-{[=v.meta.name]}"></td>
+      <td id="ips-channel-import-id-{[=v.meta.name]}"></td>
     </tr>
   {[~]}
   </tbody>

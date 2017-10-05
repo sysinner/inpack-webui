@@ -1,6 +1,6 @@
-var lpLps = {
-    base: "/lps/",
-    api: "/lps/v1/",
+var inpack = {
+    base: "/ips/",
+    api: "/ips/v1/",
     nav_reged: false,
     channel_def: {
         kind: "PackageChannel",
@@ -8,7 +8,7 @@ var lpLps = {
             name: "",
         },
         vendor_name: "",
-        vendor_api: "http://example.com/lps/v1",
+        vendor_api: "http://example.com/ips/v1",
         vendor_site: "http://example.com",
     },
     cc_channels: null,
@@ -19,7 +19,7 @@ var lpLps = {
     pkgls_chanactive: "",
     pkgls_chanvalue: "Channels",
     option_dstid: "comp-content",
-    option_navpf: "lospack",
+    option_navpf: "inpack",
     OpPermRead: 1 << 0,
     OpPermWrite: 1 << 1,
     OpPermCreate: 1 << 2,
@@ -34,24 +34,24 @@ var lpLps = {
     UserSession: null,
 }
 
-lpLps.path = function(uri) {
-    return lpLps.base + uri;
+inpack.path = function(uri) {
+    return inpack.base + uri;
 }
 
-lpLps.apipath = function(uri) {
-    return lpLps.api + uri;
+inpack.apipath = function(uri) {
+    return inpack.api + uri;
 }
 
-lpLps.tplpath = function(uri) {
-    return lpLps.base + "tpl/" + uri + ".html";
+inpack.tplpath = function(uri) {
+    return inpack.base + "tpl/" + uri + ".html";
 }
 
-lpLps.OpPermAllow = function(p, perms) {
+inpack.OpPermAllow = function(p, perms) {
     return ((perms & p) == perms);
 }
 
-lpLps.tplWorkLoader = function(uri) {
-    l4i.Ajax(lpLps.tplpath(uri), {
+inpack.tplWorkLoader = function(uri) {
+    l4i.Ajax(inpack.tplpath(uri), {
         callback: function(err, data) {
             if (err) {
                 return;
@@ -62,81 +62,81 @@ lpLps.tplWorkLoader = function(uri) {
     })
 }
 
-lpLps.NavBack = function(fn) {
+inpack.NavBack = function(fn) {
 
     if (fn && typeof fn === "function") {
-        lpLps.nav_back = fn;
-        $("#lpscp-navbar-back").css({
+        inpack.nav_back = fn;
+        $("#ipscp-navbar-back").css({
             "display": "block"
         });
         return;
     }
 
-    if (lpLps.nav_back) {
-        lpLps.nav_back();
-        lpLps.nav_back = null;
-        $("#lpscp-navbar-back").css({
+    if (inpack.nav_back) {
+        inpack.nav_back();
+        inpack.nav_back = null;
+        $("#ipscp-navbar-back").css({
             "display": "nono"
         });
     }
 }
 
-lpLps.Index = function(options) {
+inpack.Index = function(options) {
 
-    var divstr = "<div id='" + lpLps.option_navpf + "-module-navbar'>\
-  <ul id='lpscp-navbar' class='" + lpLps.option_navpf + "-module-nav'>\
-    <li id='lpscp-navbar-back' style='display:none'><a class='l4i-nav-item primary' href='#lps/back' onclick='lpLps.NavBack()'>\
+    var divstr = "<div id='" + inpack.option_navpf + "-module-navbar'>\
+  <ul id='ipscp-navbar' class='" + inpack.option_navpf + "-module-nav'>\
+    <li id='ipscp-navbar-back' style='display:none'><a class='l4i-nav-item primary' href='#ips/back' onclick='inpack.NavBack()'>\
       <span class='glyphicon glyphicon-menu-left' aria-hidden='true'></span> Back\
       </a>\
     </li>\
-    <li><a class='l4i-nav-item' href='#lps/pkginfo'>Packages</a></li>\
-    <li><a class='l4i-nav-item' href='#lps/channel'>Channels</a></li>\
+    <li><a class='l4i-nav-item' href='#ips/pkginfo'>Packages</a></li>\
+    <li><a class='l4i-nav-item' href='#ips/channel'>Channels</a></li>\
   </ul>\
-  <ul id='" + lpLps.option_navpf + "-module-navbar-optools' class='" + lpLps.option_navpf + "-module-nav " + lpLps.option_navpf + "-nav-right'></ul>\
+  <ul id='" + inpack.option_navpf + "-module-navbar-optools' class='" + inpack.option_navpf + "-module-nav " + inpack.option_navpf + "-nav-right'></ul>\
 </div>\
 <div id='work-content'></div>";
 
-    $("#" + lpLps.option_dstid).html(divstr);
+    $("#" + inpack.option_dstid).html(divstr);
 
-    if (!lpLps.nav_reged) {
-        l4i.UrlEventRegister("lps/pkginfo", lpLps.InfoListRefresh, "lpscp-navbar");
-        l4i.UrlEventRegister("lps/channel", lpLps.ChannelListRefresh, "lpscp-navbar");
-        lpLps.nav_reged = true;
+    if (!inpack.nav_reged) {
+        l4i.UrlEventRegister("ips/pkginfo", inpack.InfoListRefresh, "ipscp-navbar");
+        l4i.UrlEventRegister("ips/channel", inpack.ChannelListRefresh, "ipscp-navbar");
+        inpack.nav_reged = true;
     }
 
     if (options && options.dstid) {
-        lpLps.option_dstid = options.dstid;
+        inpack.option_dstid = options.dstid;
     }
-    if (!lpLps.pkginfo_list_optools_style) {
-        lpLps.pkginfo_list_optools_style = l4iStorage.Get("pkginfo_list_optools_style");
+    if (!inpack.pkginfo_list_optools_style) {
+        inpack.pkginfo_list_optools_style = l4iStorage.Get("pkginfo_list_optools_style");
     }
 
     seajs.use(["ep"], function(EventProxy) {
 
         var ep = EventProxy.create("info", function(info) {
             if (info && info.user_channel_write === true) {
-                lpLps.Status.user_channel_write = true;
+                inpack.Status.user_channel_write = true;
             }
-            l4i.UrlEventHandler("lps/pkginfo", true);
+            l4i.UrlEventHandler("ips/pkginfo", true);
         });
 
         ep.fail(function(err) {
             alert("Network Abort, Please try again later");
         });
 
-        l4i.Ajax(lpLps.apipath("status/info"), {
+        l4i.Ajax(inpack.apipath("status/info"), {
             callback: ep.done("info"),
         });
     });
 }
 
 
-lpLps.InfoListRefresh = function(tplid, optools_off) {
-    $("#lpscp-navbar-back").css({
+inpack.InfoListRefresh = function(tplid, optools_off) {
+    $("#ipscp-navbar-back").css({
         "display": "none"
     });
     if (!tplid || tplid.indexOf("/") >= 0) {
-        tplid = "lps-infols";
+        tplid = "ips-infols";
     }
     var alert_id = "#" + tplid + "-alert",
         uri = "?";
@@ -146,8 +146,8 @@ lpLps.InfoListRefresh = function(tplid, optools_off) {
         if (q) {
             uri += "q=" + q;
         }
-        if (lpLps.infols_grpactive && lpLps.infols_grpactive != "") {
-            uri += "&group=" + lpLps.infols_grpactive;
+        if (inpack.infols_grpactive && inpack.infols_grpactive != "") {
+            uri += "&group=" + inpack.infols_grpactive;
         }
     }
 
@@ -161,8 +161,8 @@ lpLps.InfoListRefresh = function(tplid, optools_off) {
                 }
 
                 if (!channels || !channels.items || channels.items.length < 1) {
-                    if (lpLps.Status.user_channel_write === true) {
-                        return $("#lps-channel-set-alert").css({
+                    if (inpack.Status.user_channel_write === true) {
+                        return $("#ips-channel-set-alert").css({
                             "display": "block"
                         });
                     }
@@ -170,8 +170,8 @@ lpLps.InfoListRefresh = function(tplid, optools_off) {
                 }
 
                 if (!optools_off) {
-                    losCp.OpToolsRefresh("#lps-infols-optools", function() {
-                        if (lpLps.pkginfo_list_optools_style == "th") {
+                    inCp.OpToolsRefresh("#ips-infols-optools", function() {
+                        if (inpack.pkginfo_list_optools_style == "th") {
                             $("#pkginfo-list-navstyle-list").removeClass("hover");
                             $("#pkginfo-list-navstyle-th").addClass("hover");
                         } else {
@@ -222,13 +222,13 @@ lpLps.InfoListRefresh = function(tplid, optools_off) {
 
                 var list_cb = function() {
                     var dstid_nav = tplid + "-grpnav";
-                    if (lpLps.pkginfo_list_optools_style == "th") {
+                    if (inpack.pkginfo_list_optools_style == "th") {
                         dstid_nav = tplid + "-grpnav-th";
-                        $("#lps-infols-grpnav-th").css({
+                        $("#ips-infols-grpnav-th").css({
                             "display": "block"
                         });
                     } else {
-                        $("#lps-infols-grpnav-th").css({
+                        $("#ips-infols-grpnav-th").css({
                             "display": "none"
                         });
                         $("#" + tplid + "-grpnav-th").empty();
@@ -242,33 +242,33 @@ lpLps.InfoListRefresh = function(tplid, optools_off) {
                         tplid: tplid + "-grpnav-tpl",
                         data: {
                             groups: groups.items,
-                            grpname: lpLps.infols_grpactive,
-                            grpvalue: lpLps.infols_grpvalue,
+                            grpname: inpack.infols_grpactive,
+                            grpvalue: inpack.infols_grpvalue,
                         },
                     });
                 }
 
                 // refresh info list
                 var tplid_style = tplid + "-tpl";
-                if (lpLps.pkginfo_list_optools_style == "th") {
+                if (inpack.pkginfo_list_optools_style == "th") {
                     tplid_style = tplid + "-th-tpl";
                 }
                 l4iTemplate.Render({
                     dstid: tplid,
                     tplid: tplid_style,
                     data: {
-                        _api_url: lpLps.api,
+                        _api_url: inpack.api,
                         items: info.items,
                         groups: groups.items,
                     },
                     callback: list_cb,
                 });
 
-                if (!lpLps.cc_channels) {
-                    lpLps.cc_channels = channels;
+                if (!inpack.cc_channels) {
+                    inpack.cc_channels = channels;
                 }
-                if (!lpLps.cc_groups) {
-                    lpLps.cc_groups = groups;
+                if (!inpack.cc_groups) {
+                    inpack.cc_groups = groups;
                 }
             });
 
@@ -279,64 +279,64 @@ lpLps.InfoListRefresh = function(tplid, optools_off) {
         if (document.getElementById(tplid)) {
             ep.emit("tpl", null);
         } else {
-            l4i.Ajax(lpLps.tplpath("pkginfo/list"), {
+            l4i.Ajax(inpack.tplpath("pkginfo/list"), {
                 callback: ep.done("tpl"),
             });
         }
 
-        if (lpLps.cc_channels && lpLps.cc_channels.items.length > 0) {
-            ep.emit("channels", lpLps.cc_channels);
+        if (inpack.cc_channels && inpack.cc_channels.items.length > 0) {
+            ep.emit("channels", inpack.cc_channels);
         } else {
-            l4i.Ajax(lpLps.apipath("channel/list"), {
+            l4i.Ajax(inpack.apipath("channel/list"), {
                 callback: ep.done("channels"),
             });
         }
 
-        if (lpLps.cc_groups && lpLps.cc_groups.items.length > 0) {
-            ep.emit("groups", lpLps.cc_groups);
+        if (inpack.cc_groups && inpack.cc_groups.items.length > 0) {
+            ep.emit("groups", inpack.cc_groups);
         } else {
-            l4i.Ajax(lpLps.apipath("group/list"), {
+            l4i.Ajax(inpack.apipath("group/list"), {
                 callback: ep.done("groups"),
             });
         }
 
-        l4i.Ajax(lpLps.apipath("pkg-info/list" + uri), {
+        l4i.Ajax(inpack.apipath("pkg-info/list" + uri), {
             callback: ep.done("info"),
         });
     });
 }
 
-lpLps.InfoListStyle = function(s) {
-    if (!s || s == lpLps.pkginfo_list_optools_style) {
+inpack.InfoListStyle = function(s) {
+    if (!s || s == inpack.pkginfo_list_optools_style) {
         return;
     }
-    lpLps.pkginfo_list_optools_style = s;
+    inpack.pkginfo_list_optools_style = s;
     l4iStorage.Set("pkginfo_list_optools_style", s);
-    lpLps.InfoListRefresh();
+    inpack.InfoListRefresh();
 }
 
-lpLps.InfoPackageList = function(name) {
-    lpLps.NavBack(lpLps.InfoListRefresh);
-    lpLps.PackageListRefresh(null, name);
+inpack.InfoPackageList = function(name) {
+    inpack.NavBack(inpack.InfoListRefresh);
+    inpack.PackageListRefresh(null, name);
 }
 
 
-lpLps.InfoListGroupSelect = function(grp_name, grp_value) {
+inpack.InfoListGroupSelect = function(grp_name, grp_value) {
     if (!grp_name) {
         grp_name = "";
     }
     if (!grp_value) {
         grp_value = "Groups";
     }
-    lpLps.infols_grpactive = grp_name;
-    lpLps.infols_grpvalue = grp_value;
+    inpack.infols_grpactive = grp_name;
+    inpack.infols_grpvalue = grp_value;
 
-    $("#lps-infols-qry-grpvalue").text(grp_value);
+    $("#ips-infols-qry-grpvalue").text(grp_value);
 
-    lpLps.InfoListRefresh();
+    inpack.InfoListRefresh();
 }
 
-lpLps.InfoSet = function(name) {
+inpack.InfoSet = function(name) {
     seajs.use(["ep"], function(EventProxy) {
 
         var ep = EventProxy.create("tpl", "data", function(tpl, data) {
@@ -358,8 +358,8 @@ lpLps.InfoSet = function(name) {
                 success: function() {
 
                     l4iTemplate.Render({
-                        dstid: "lps-infoset",
-                        tplid: "lps-infoset-tpl",
+                        dstid: "ips-infoset",
+                        tplid: "ips-infoset-tpl",
                         data: {
                             info: data,
                         },
@@ -371,7 +371,7 @@ lpLps.InfoSet = function(name) {
                         title: "Close",
                     },
                     {
-                        onclick: "lpLps.InfoSetCommit()",
+                        onclick: "inpack.InfoSetCommit()",
                         title: "Save",
                         style: "btn-primary",
                     },
@@ -383,19 +383,19 @@ lpLps.InfoSet = function(name) {
             alert("Network Abort, Please try again later");
         });
 
-        l4i.Ajax(lpLps.apipath("pkg-info/entry?name=" + name), {
+        l4i.Ajax(inpack.apipath("pkg-info/entry?name=" + name), {
             callback: ep.done("data"),
         });
 
-        l4i.Ajax(lpLps.tplpath("pkginfo/set"), {
+        l4i.Ajax(inpack.tplpath("pkginfo/set"), {
             callback: ep.done("tpl"),
         });
     });
 }
 
-lpLps.InfoSetCommit = function() {
-    var form = $("#lps-infoset"),
-        alertid = "#lps-infoset-alert";
+inpack.InfoSetCommit = function() {
+    var form = $("#ips-infoset"),
+        alertid = "#ips-infoset-alert";
     var req = {
         meta: {
             name: form.find("input[name=name]").val(),
@@ -405,7 +405,7 @@ lpLps.InfoSetCommit = function() {
         },
     }
 
-    l4i.Ajax(lpLps.apipath("pkg-info/set"), {
+    l4i.Ajax(inpack.apipath("pkg-info/set"), {
         method: "POST",
         data: JSON.stringify(req),
         callback: function(err, rsj) {
@@ -428,13 +428,13 @@ lpLps.InfoSetCommit = function() {
 
             window.setTimeout(function() {
                 l4iModal.Close();
-                lpLps.InfoListRefresh();
+                inpack.InfoListRefresh();
             }, 1000);
         },
     });
 }
 
-lpLps.InfoView = function(name) {
+inpack.InfoView = function(name) {
     seajs.use(["ep"], function(EventProxy) {
 
         var ep = EventProxy.create("tpl", "data", "pkgs", "groups", function(tpl, data, pkgs, groups) {
@@ -457,7 +457,7 @@ lpLps.InfoView = function(name) {
             } else {
                 data._groups = [];
             }
-            data._api_url = lpLps.api;
+            data._api_url = inpack.api;
 
             l4iModal.Open({
                 title: "Package Info : " + data.meta.name,
@@ -478,43 +478,43 @@ lpLps.InfoView = function(name) {
             alert("Network Abort, Please try again later");
         });
 
-        l4i.Ajax(lpLps.apipath("pkg-info/entry?name=" + name), {
+        l4i.Ajax(inpack.apipath("pkg-info/entry?name=" + name), {
             callback: ep.done("data"),
         });
 
-        l4i.Ajax(lpLps.apipath("pkg/list?name=" + name), {
+        l4i.Ajax(inpack.apipath("pkg/list?name=" + name), {
             callback: ep.done("pkgs"),
         });
 
-        if (lpLps.cc_groups && lpLps.cc_groups.items.length > 0) {
-            ep.emit("groups", lpLps.cc_groups);
+        if (inpack.cc_groups && inpack.cc_groups.items.length > 0) {
+            ep.emit("groups", inpack.cc_groups);
         } else {
-            l4i.Ajax(lpLps.apipath("group/list"), {
+            l4i.Ajax(inpack.apipath("group/list"), {
                 callback: ep.done("groups"),
             });
         }
 
-        l4i.Ajax(lpLps.tplpath("pkginfo/view"), {
+        l4i.Ajax(inpack.tplpath("pkginfo/view"), {
             callback: ep.done("tpl"),
         });
     });
 }
 
 
-lpLps.PackageNew = function() {
+inpack.PackageNew = function() {
     seajs.use(["ep"], function(EventProxy) {
 
         var ep = EventProxy.create("tpl", "channels", function(tpl, channels) {
 
             if (!channels.items || channels.items.length < 1) {
-                return lpLps.ChannelSet();
+                return inpack.ChannelSet();
             }
 
             $("#work-content").html(tpl);
 
             l4iTemplate.Render({
-                dstid: "lps-pkgnew",
-                tplid: "lps-pkgnew-tpl",
+                dstid: "ips-pkgnew",
+                tplid: "ips-pkgnew-tpl",
                 data: {
                     channels: channels.items,
                 },
@@ -525,23 +525,23 @@ lpLps.PackageNew = function() {
             alert("Network Abort, Please try again later");
         });
 
-        if (lpLps.cc_channels) {
-            ep.emit("channels", lpLps.cc_channels);
+        if (inpack.cc_channels) {
+            ep.emit("channels", inpack.cc_channels);
         } else {
-            l4i.Ajax(lpLps.apipath("channel/list"), {
+            l4i.Ajax(inpack.apipath("channel/list"), {
                 callback: ep.done("channels"),
             });
         }
 
-        l4i.Ajax(lpLps.tplpath("pkg/new"), {
+        l4i.Ajax(inpack.tplpath("pkg/new"), {
             callback: ep.done("tpl"),
         });
     });
 }
 
-lpLps.PackageNewCommit = function() {
-    var files = document.getElementById('lps-pkgnew-file').files,
-        alertid = "#lps-pkgnew-alert";
+inpack.PackageNewCommit = function() {
+    var files = document.getElementById('ips-pkgnew-file').files,
+        alertid = "#ips-pkgnew-alert";
 
     if (!files.length) {
         l4i.InnerAlert(alertid, "alert-danger", 'Please select a file');
@@ -571,10 +571,10 @@ lpLps.PackageNewCommit = function() {
                     name: file.name,
                     data: e.target.result,
                     sumcheck: "sha1:TODO",
-                    channel: $("#lps-pkgnew").find("select[name=channel]").val(),
+                    channel: $("#ips-pkgnew").find("select[name=channel]").val(),
                 }
 
-                l4i.Ajax(lpLps.apipath("pkg/commit"), {
+                l4i.Ajax(inpack.apipath("pkg/commit"), {
                     method: "POST",
                     data: JSON.stringify(req),
                     timeout: 600000,
@@ -604,7 +604,7 @@ lpLps.PackageNewCommit = function() {
                         l4i.InnerAlert(alertid, 'alert-success', "Successfully commit");
 
                         window.setTimeout(function() {
-                            lpLps.tplWorkLoader("pkginfo/list");
+                            inpack.tplWorkLoader("pkginfo/list");
                         }, 1000);
                     }
                 });
@@ -616,25 +616,25 @@ lpLps.PackageNewCommit = function() {
     }
 }
 
-lpLps.PackageList = function() {
-    lpLps.pkgls_pkgactive = null;
-    lpLps.pkgls_chanactive = "";
-    lpLps.pkgls_chanvalue = "Channels";
-    lpLps.PackageListRefresh();
+inpack.PackageList = function() {
+    inpack.pkgls_pkgactive = null;
+    inpack.pkgls_chanactive = "";
+    inpack.pkgls_chanvalue = "Channels";
+    inpack.PackageListRefresh();
 }
 
-lpLps.PackageListRefresh = function(tplid, pkgname, optools_off) {
+inpack.PackageListRefresh = function(tplid, pkgname, optools_off) {
     if (pkgname) {
-        lpLps.pkgls_pkgactive = pkgname;
+        inpack.pkgls_pkgactive = pkgname;
     }
 
     if (!tplid || tplid.indexOf("/") >= 0) {
-        tplid = "lps-pkgls";
+        tplid = "ips-pkgls";
     }
     var alert_id = "#" + tplid + "-alert",
         uri = "?";
-    if (lpLps.pkgls_pkgactive) {
-        uri += "name=" + lpLps.pkgls_pkgactive;
+    if (inpack.pkgls_pkgactive) {
+        uri += "name=" + inpack.pkgls_pkgactive;
     }
 
     if (document.getElementById(tplid)) {
@@ -642,8 +642,8 @@ lpLps.PackageListRefresh = function(tplid, pkgname, optools_off) {
         if (q) {
             uri += "&q=" + q;
         }
-        if (lpLps.pkgls_chanactive && lpLps.pkgls_chanactive != "") {
-            uri += "&channel=" + lpLps.pkgls_chanactive;
+        if (inpack.pkgls_chanactive && inpack.pkgls_chanactive != "") {
+            uri += "&channel=" + inpack.pkgls_chanactive;
         }
     }
 
@@ -655,7 +655,7 @@ lpLps.PackageListRefresh = function(tplid, pkgname, optools_off) {
                 $("#work-content").html(tpl);
             }
             if (!optools_off) {
-                losCp.OpToolsRefresh("#lps-pkgls-optools");
+                inCp.OpToolsRefresh("#ips-pkgls-optools");
             }
 
             if (!channels || !channels.items) {
@@ -676,8 +676,8 @@ lpLps.PackageListRefresh = function(tplid, pkgname, optools_off) {
                 });
             }
 
-            if (lpLps.pkgls_pkgactive) {
-                $("#lps-pkgls-ui-hname").css({
+            if (inpack.pkgls_pkgactive) {
+                $("#ips-pkgls-ui-hname").css({
                     "display": "none"
                 });
             }
@@ -686,7 +686,7 @@ lpLps.PackageListRefresh = function(tplid, pkgname, optools_off) {
                 dstid: tplid,
                 tplid: tplid + "-tpl",
                 data: {
-                    _pkgactive: lpLps.pkgls_pkgactive,
+                    _pkgactive: inpack.pkgls_pkgactive,
                     items: pkgls.items,
                     channels: channels.items,
                 },
@@ -698,13 +698,13 @@ lpLps.PackageListRefresh = function(tplid, pkgname, optools_off) {
                     tplid: tplid + "-chans-tpl",
                     data: {
                         channels: channels.items,
-                        chanactive: lpLps.pkgls_chanactive,
-                        chanvalue: lpLps.pkgls_chanvalue,
+                        chanactive: inpack.pkgls_chanactive,
+                        chanvalue: inpack.pkgls_chanvalue,
                     },
                 });
             }
-            if (!lpLps.cc_channels && channels.items.length > 0) {
-                lpLps.cc_channels = channels;
+            if (!inpack.cc_channels && channels.items.length > 0) {
+                inpack.cc_channels = channels;
             }
         });
 
@@ -715,26 +715,26 @@ lpLps.PackageListRefresh = function(tplid, pkgname, optools_off) {
         if (document.getElementById(tplid)) {
             ep.emit("tpl", null);
         } else {
-            l4i.Ajax(lpLps.tplpath("pkg/list"), {
+            l4i.Ajax(inpack.tplpath("pkg/list"), {
                 callback: ep.done("tpl"),
             });
         }
 
-        if (lpLps.cc_channels && lpLps.cc_channels.items.length > 0) {
-            ep.emit("channels", lpLps.cc_channels);
+        if (inpack.cc_channels && inpack.cc_channels.items.length > 0) {
+            ep.emit("channels", inpack.cc_channels);
         } else {
-            l4i.Ajax(lpLps.apipath("channel/list"), {
+            l4i.Ajax(inpack.apipath("channel/list"), {
                 callback: ep.done("channels"),
             });
         }
 
-        l4i.Ajax(lpLps.apipath("pkg/list" + uri), {
+        l4i.Ajax(inpack.apipath("pkg/list" + uri), {
             callback: ep.done("pkgls"),
         });
     });
 }
 
-lpLps.PackageSet = function(id) {
+inpack.PackageSet = function(id) {
     seajs.use(["ep"], function(EventProxy) {
 
         var ep = EventProxy.create("tpl", "channels", "pkg", function(tpl, channels, pkg) {
@@ -755,8 +755,8 @@ lpLps.PackageSet = function(id) {
                 success: function() {
 
                     l4iTemplate.Render({
-                        dstid: "lps-pkgset",
-                        tplid: "lps-pkgset-tpl",
+                        dstid: "ips-pkgset",
+                        tplid: "ips-pkgset-tpl",
                         data: {
                             channels: channels,
                             pkg: pkg,
@@ -769,14 +769,14 @@ lpLps.PackageSet = function(id) {
                         title: "Close",
                     },
                     {
-                        onclick: "lpLps.PackageSetCommit()",
+                        onclick: "inpack.PackageSetCommit()",
                         title: "Save",
                         style: "btn-primary",
                     },
                 ],
             });
 
-            if (!lpLps.cc_channels) {
+            if (!inpack.cc_channels) {
                 lpLos.cc_channels = channels;
             }
         });
@@ -786,27 +786,27 @@ lpLps.PackageSet = function(id) {
             alert("Network Abort, Please try again later");
         });
 
-        if (lpLps.cc_channels && lpLps.cc_channels.items.length > 0) {
-            ep.emit("channels", lpLps.cc_channels);
+        if (inpack.cc_channels && inpack.cc_channels.items.length > 0) {
+            ep.emit("channels", inpack.cc_channels);
         } else {
-            l4i.Ajax(lpLps.apipath("channel/list"), {
+            l4i.Ajax(inpack.apipath("channel/list"), {
                 callback: ep.done("channels"),
             });
         }
 
-        l4i.Ajax(lpLps.apipath("pkg/entry?id=" + id), {
+        l4i.Ajax(inpack.apipath("pkg/entry?id=" + id), {
             callback: ep.done("pkg"),
         });
 
-        l4i.Ajax(lpLps.tplpath("pkg/set"), {
+        l4i.Ajax(inpack.tplpath("pkg/set"), {
             callback: ep.done("tpl"),
         });
     });
 }
 
-lpLps.PackageSetCommit = function() {
-    var alertid = "#lps-pkgset-alert",
-        form = $("#lps-pkgset");
+inpack.PackageSetCommit = function() {
+    var alertid = "#ips-pkgset-alert",
+        form = $("#ips-pkgset");
     if (!form) {
         return;
     }
@@ -819,7 +819,7 @@ lpLps.PackageSetCommit = function() {
     }
 
 
-    l4i.Ajax(lpLps.apipath("pkg/set"), {
+    l4i.Ajax(inpack.apipath("pkg/set"), {
         method: "POST",
         data: JSON.stringify(req),
         callback: function(err, rsj) {
@@ -837,7 +837,7 @@ lpLps.PackageSetCommit = function() {
 
             window.setTimeout(function() {
                 l4iModal.Close();
-                lpLps.PackageListRefresh();
+                inpack.PackageListRefresh();
             }, 1000);
         },
         error: function(xhr, textStatus, error) {
@@ -847,11 +847,11 @@ lpLps.PackageSetCommit = function() {
 }
 
 
-lpLps.ChannelListRefresh = function() {
-    $("#lpscp-navbar-back").css({
+inpack.ChannelListRefresh = function() {
+    $("#ipscp-navbar-back").css({
         "display": "none"
     });
-    var alertid = "#lps-channells-alert";
+    var alertid = "#ips-channells-alert";
 
     seajs.use(["ep"], function(EventProxy) {
         var ep = EventProxy.create('tpl', 'data', function(tpl, rsj) {
@@ -867,13 +867,13 @@ lpLps.ChannelListRefresh = function() {
             }
 
             if (rsj.items.length < 1) {
-                if (lpLps.Status.user_channel_write === true) {
-                    return lpLps.ChannelSet();
+                if (inpack.Status.user_channel_write === true) {
+                    return inpack.ChannelSet();
                 }
                 return l4i.InnerAlert(alertid, 'alert-danger', "No available, or authorized channels can be accessed");
             }
 
-            if (lpLps.UserSession && lpLps.UserSession.username == "sysadmin") {
+            if (inpack.UserSession && inpack.UserSession.username == "sysadmin") {
                 rsj._stat_size_on = true
             }
 
@@ -892,32 +892,32 @@ lpLps.ChannelListRefresh = function() {
                 }
             }
 
-            losCp.OpToolsRefresh("#lps-channells-optools");
+            inCp.OpToolsRefresh("#ips-channells-optools");
 
             l4iTemplate.Render({
-                dstid: "lps-channells",
-                tplid: "lps-channells-tpl",
+                dstid: "ips-channells",
+                tplid: "ips-channells-tpl",
                 data: rsj,
             });
         });
 
         ep.fail(function(err) {
             // TODO
-            alert("ChannelSet error, Please try again later (EC:lps-channelset)");
+            alert("ChannelSet error, Please try again later (EC:ips-channelset)");
         });
 
-        l4i.Ajax(lpLps.tplpath("channel/list"), {
+        l4i.Ajax(inpack.tplpath("channel/list"), {
             callback: ep.done('tpl'),
         });
 
-        l4i.Ajax(lpLps.apipath("channel/list"), {
+        l4i.Ajax(inpack.apipath("channel/list"), {
             callback: ep.done('data'),
         });
     });
 }
 
-lpLps.ChannelDelete = function(name) {
-    l4i.Ajax(lpLps.apipath("channel/delete?name=" + name), {
+inpack.ChannelDelete = function(name) {
+    l4i.Ajax(inpack.apipath("channel/delete?name=" + name), {
         callback: function(err, rsj) {
 
             if (!rsj || rsj.kind != "PackageChannel") {
@@ -931,8 +931,8 @@ lpLps.ChannelDelete = function(name) {
             l4i.InnerAlert("#p4e5v1", 'alert-success', "Successful operation");
 
             window.setTimeout(function() {
-                lpLps.cc_channels = null;
-                lpLps.ChannelListRefresh();
+                inpack.cc_channels = null;
+                inpack.ChannelListRefresh();
             }, 1000);
         },
         error: function(xhr, textStatus, error) {
@@ -941,13 +941,13 @@ lpLps.ChannelDelete = function(name) {
     });
 }
 
-lpLps.ChannelSet = function(name) {
+inpack.ChannelSet = function(name) {
     seajs.use(["ep"], function(EventProxy) {
 
         var ep = EventProxy.create('tpl', 'data', 'roles', function(tpl, rsj, roles) {
 
             if (!rsj || rsj.error || !rsj.kind || rsj.kind != "PackageChannel") {
-                rsj = l4i.Clone(lpLps.channel_def);
+                rsj = l4i.Clone(inpack.channel_def);
             }
 
             if (!rsj.stat_num) {
@@ -985,8 +985,8 @@ lpLps.ChannelSet = function(name) {
             $("#work-content").html(tpl);
 
             l4iTemplate.Render({
-                dstid: "lps-channelset",
-                tplid: "lps-channelset-tpl",
+                dstid: "ips-channelset",
+                tplid: "ips-channelset-tpl",
                 data: {
                     actionTitle: ((rsj.meta.name == "") ? "New Package Channel" : "Setting Channel"),
                     channel: rsj,
@@ -996,17 +996,17 @@ lpLps.ChannelSet = function(name) {
 
         ep.fail(function(err) {
             // TODO
-            alert("ChannelSet error, Please try again later (EC:lps-channelset)");
+            alert("ChannelSet error, Please try again later (EC:ips-channelset)");
         });
 
-        l4i.Ajax(lpLps.tplpath("channel/set"), {
+        l4i.Ajax(inpack.tplpath("channel/set"), {
             callback: ep.done('tpl'),
         });
 
-        if (lpLps.iamAppRoles) {
-            ep.emit("roles", lpLps.iamAppRoles);
+        if (inpack.iamAppRoles) {
+            ep.emit("roles", inpack.iamAppRoles);
         } else {
-            l4i.Ajax(losCp.base + "auth/app-role-list", {
+            l4i.Ajax(inCp.base + "auth/app-role-list", {
                 callback: function(err, data) {
                     if (err) {
                         return alert(err);
@@ -1014,7 +1014,7 @@ lpLps.ChannelSet = function(name) {
                     if (!data.items || data.items.length < 1) {
                         return alert("No Roles Data Found");
                     }
-                    lpLps.iamAppRoles = data;
+                    inpack.iamAppRoles = data;
                     ep.emit("roles", data);
                 },
             });
@@ -1023,7 +1023,7 @@ lpLps.ChannelSet = function(name) {
         if (!name) {
             ep.emit('data', "");
         } else {
-            l4i.Ajax(lpLps.apipath("channel/entry?name=" + name), {
+            l4i.Ajax(inpack.apipath("channel/entry?name=" + name), {
                 callback: ep.done('data'),
             });
         }
@@ -1032,8 +1032,8 @@ lpLps.ChannelSet = function(name) {
 
 
 
-lpLps.ChannelSetCommit = function() {
-    var form = $("#lps-channelset");
+inpack.ChannelSetCommit = function() {
+    var form = $("#ips-channelset");
     if (!form) {
         return;
     }
@@ -1051,7 +1051,7 @@ lpLps.ChannelSetCommit = function() {
         },
     }
 
-    var alertid = "#lps-channelset-alert";
+    var alertid = "#ips-channelset-alert";
     try {
 
         form.find("input[name=roles_read]:checked").each(function() {
@@ -1072,7 +1072,7 @@ lpLps.ChannelSetCommit = function() {
         return l4i.InnerAlert(alert_id, 'alert-danger', err);
     }
 
-    l4i.Ajax(lpLps.apipath("channel/set"), {
+    l4i.Ajax(inpack.apipath("channel/set"), {
         method: "POST",
         data: JSON.stringify(req),
         callback: function(err, rsj) {
@@ -1088,27 +1088,27 @@ lpLps.ChannelSetCommit = function() {
             l4i.InnerAlert(alertid, 'alert-success', "Successful operation");
 
             window.setTimeout(function() {
-                lpLps.cc_channels = null;
-                lpLps.ChannelListRefresh();
+                inpack.cc_channels = null;
+                inpack.ChannelListRefresh();
             }, 1000);
         },
     });
 }
 
-lpLps.channelImportArray = [];
+inpack.channelImportArray = [];
 
-lpLps.ChannelImport = function() {
-    lpLps.channelImportArray = [];
-    lpLps.tplWorkLoader("channel/import");
+inpack.ChannelImport = function() {
+    inpack.channelImportArray = [];
+    inpack.tplWorkLoader("channel/import");
 }
 
-lpLps.ChannelImportConfirm = function() {
-    var api = $("#lps-channel-import-api").val();
-    $("#lps-channel-import-btn").attr('disabled', 'disabled');
+inpack.ChannelImportConfirm = function() {
+    var api = $("#ips-channel-import-api").val();
+    $("#ips-channel-import-btn").attr('disabled', 'disabled');
 
     l4i.InnerAlert("#p4e5v1", 'alert-info', "Pending");
 
-    l4i.Ajax(lpLps.apipath("channel/list"), {
+    l4i.Ajax(inpack.apipath("channel/list"), {
         callback: function(err, rsj) {
 
             if (!rsj || rsj.kind != "PackageChannelList") {
@@ -1125,19 +1125,19 @@ lpLps.ChannelImportConfirm = function() {
                 }
             }
 
-            lpLps.channelImportArray = rsj.items;
+            inpack.channelImportArray = rsj.items;
 
             l4iTemplate.Render({
-                dstid: "lps-channel-import",
-                tplid: "lps-channel-import-tpl",
+                dstid: "ips-channel-import",
+                tplid: "ips-channel-import-tpl",
                 data: {
                     channels: rsj.items,
                 },
                 success: function() {
-                    var div = $("#lps-channel-import-btn");
+                    var div = $("#ips-channel-import-btn");
                     if (div) {
                         div.text("Confirm and Save");
-                        div.attr("onclick", 'lpLps.ChannelImportSave()');
+                        div.attr("onclick", 'inpack.ChannelImportSave()');
                         div.removeAttr("disabled");
                     }
                 },
@@ -1150,24 +1150,24 @@ lpLps.ChannelImportConfirm = function() {
     });
 }
 
-lpLps.ChannelImportSave = function() {
+inpack.ChannelImportSave = function() {
     var chs = [];
-    $("#lps-channel-import").find("input[name='lps-channel-import-ids']:checked").each(function() {
+    $("#ips-channel-import").find("input[name='ips-channel-import-ids']:checked").each(function() {
         chs.push($(this).val());
     });
 
-    for (var i in lpLps.channelImportArray) {
+    for (var i in inpack.channelImportArray) {
 
-        var channel = lpLps.channelImportArray[i];
+        var channel = inpack.channelImportArray[i];
 
         if (chs.indexOf(channel.meta.name) < 0) {
             continue;
         }
 
         channel.kind = "PackageChannel";
-        var alertid = "#lps-channel-import-id-" + channel.meta.name;
+        var alertid = "#ips-channel-import-id-" + channel.meta.name;
 
-        l4i.Ajax(lpLps.apipath("channel/set"), {
+        l4i.Ajax(inpack.apipath("channel/set"), {
             method: "POST",
             data: JSON.stringify(channel),
             async: false,
@@ -1198,7 +1198,7 @@ lpLps.ChannelImportSave = function() {
 }
 
 
-lpLps.UtilResourceSizeFormat = function(size, tofix) {
+inpack.UtilResourceSizeFormat = function(size, tofix) {
     var ms = [
         [7, "ZB"],
         [6, "EB"],
