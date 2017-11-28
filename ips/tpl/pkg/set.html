@@ -23,4 +23,15 @@
     {[~]}
     </select>
   </div>
+
+  <div class="form-group">
+    <label>Status</label>
+    <div>
+    {[~it.actives :v]}
+      <span class="ips-form-checkbox checkbox-inline">
+        <input type="radio" name="op_perm_active" value="{[=v.value]}" {[ if (v.action) { ]}checked="checked"{[ } ]}> {[=v.name]}
+      </span>
+    {[~]}
+    </div>
+  </div>
 </script>

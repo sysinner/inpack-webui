@@ -88,3 +88,9 @@
   font-weight: bold;
   line-height: 100%;
 }
+
+
+.ips-form-checkbox {
+  margin: 0 20px 0 0;
+  padding: 10px 0;
+}

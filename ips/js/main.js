@@ -25,6 +25,7 @@ var inpack = {
     OpPermCreate: 1 << 2,
     OpPermDelete: 1 << 3,
     OpPermList: 1 << 4,
+    OpPermOff: 1 << 5,
     Status: {
         user_channel_write: false,
     },
@@ -747,6 +748,19 @@ inpack.PackageSet = function(id) {
                 return;
             }
 
+            var actives = [{
+                name: "Active",
+                value: "on",
+            }, {
+                name: "Deprecated",
+                value: "off",
+            }];
+            if (inpack.OpPermAllow(pkg.op_perm, inpack.OpPermOff)) {
+                actives[1].action = true;
+            } else {
+                actives[0].action = true;
+            }
+
             l4iModal.Open({
                 title: "Package Settings",
                 width: 600,
@@ -760,6 +774,7 @@ inpack.PackageSet = function(id) {
                         data: {
                             channels: channels,
                             pkg: pkg,
+                            actives: actives,
                         },
                     });
                 },
@@ -818,6 +833,10 @@ inpack.PackageSetCommit = function() {
         channel: form.find("select[name=channel]").val(),
     }
 
+    var op_perm_active = form.find("input[name=op_perm_active]:checked").val();
+    if (op_perm_active == "off") {
+        req.op_perm = inpack.OpPermOff;
+    }
 
     l4i.Ajax(inpack.apipath("pkg/set"), {
         method: "POST",
