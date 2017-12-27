@@ -59,6 +59,9 @@ inpack.tplWorkLoader = function(uri) {
             }
 
             $("#work-content").html(data);
+            $("#work-content").css({
+                "padding": "0 10px"
+            });
         },
     })
 }
@@ -175,9 +178,15 @@ inpack.InfoListRefresh = function(tplid, optools_off) {
                         if (inpack.pkginfo_list_optools_style == "th") {
                             $("#pkginfo-list-navstyle-list").removeClass("hover");
                             $("#pkginfo-list-navstyle-th").addClass("hover");
+                            $("#work-content").css({
+                                "padding": "0"
+                            });
                         } else {
                             $("#pkginfo-list-navstyle-list").addClass("hover");
                             $("#pkginfo-list-navstyle-th").removeClass("hover");
+                            $("#work-content").css({
+                                "padding": "0 10px"
+                            });
                         }
                     });
                 }
@@ -512,6 +521,9 @@ inpack.PackageNew = function() {
             }
 
             $("#work-content").html(tpl);
+            $("#work-content").css({
+                "padding": "0 10px"
+            });
 
             l4iTemplate.Render({
                 dstid: "ips-pkgnew",
@@ -654,6 +666,9 @@ inpack.PackageListRefresh = function(tplid, pkgname, optools_off) {
 
             if (tpl) {
                 $("#work-content").html(tpl);
+                $("#work-content").css({
+                    "padding": "0 10px"
+                });
             }
             if (!optools_off) {
                 inCp.OpToolsRefresh("#ips-pkgls-optools");
@@ -876,6 +891,9 @@ inpack.ChannelListRefresh = function() {
         var ep = EventProxy.create('tpl', 'data', function(tpl, rsj) {
 
             $("#work-content").html(tpl);
+            $("#work-content").css({
+                "padding": "0 10px"
+            });
 
             if (!rsj) {
                 rsj = {};
@@ -1002,6 +1020,9 @@ inpack.ChannelSet = function(name) {
             }
 
             $("#work-content").html(tpl);
+            $("#work-content").css({
+                "padding": "0 10px"
+            });
 
             l4iTemplate.Render({
                 dstid: "ips-channelset",

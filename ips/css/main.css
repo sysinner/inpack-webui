@@ -20,6 +20,7 @@
 }
 
 .ips-pkginfo-tiles {
+  position: relative;
   left: 0px;
   right: 0px;
   width: 100%;
@@ -34,7 +35,6 @@
   padding: 0;
   cursor: pointer;
   background-color: #ECF0F1;
-  box-shadow: inset 0px 0px 1px #FFFFCC;
   width: 300px;
   height: 170px;
   margin: 0 10px 20px 10px;
