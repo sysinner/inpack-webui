@@ -50,7 +50,7 @@
 <tbody>
 {[~it.items :v]}
 <tr>
-  <td><img src="{[=it._api_url]}/pkg-info/ico?name={[=v.meta.name]}&type=11&size=64" width="26" height="26"></td>
+  <td><img src="{[=it._api_url]}/pkg-info/icon?name={[=v.meta.name]}&type=11&size=64" width="26" height="26"></td>
   <td>
     <a href="#pkginfo/view" onclick="inpack.InfoView('{[=v.meta.name]}')" class="item_title">{[=v.meta.name]}</a>
   </td>
@@ -93,7 +93,7 @@
 {[~it.items :v]}
 <li class="ips-pkginfo-tile" onclick="inpack.InfoView('{[=v.meta.name]}')">
   <div class="subtitle ct-content" id="status-{[=v.meta.name]}"
-    style="background: url('{[=it._api_url]}/pkg-info/ico?name={[=v.meta.name]}&type=21&size=200') no-repeat center top; background-size: 200px 100px;">
+    style="background: url('{[=it._api_url]}/pkg-info/icon?name={[=v.meta.name]}&type=21&size=200') no-repeat center top; background-size: 200px 100px;">
   </div>
   <div class="status">
     <div class="title">{[=v.meta.name]}</div>
