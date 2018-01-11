@@ -19,6 +19,14 @@
   line-height: 100%;
 }
 
+.ips-div-light {
+  clear: both;
+  background-color: #fff;
+  margin: 0 10px;
+  padding: 0;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.15);
+}
+
 .ips-pkginfo-tiles {
   position: relative;
   left: 0px;
@@ -46,6 +54,7 @@
 .ips-pkginfo-tile:empty {
   height: 0;
   border: none;
+  margin-bottom: 0;
 }
 
 .ips-pkginfo-tile:hover {
