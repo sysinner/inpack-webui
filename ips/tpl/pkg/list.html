@@ -65,7 +65,7 @@
   </td>
   <td>{[=inpack.UtilResourceSizeFormat(v.size, 2)]}</td>
   <td>{[=l4i.MetaTimeParseFormat(v.built, "Y-m-d")]}</td>
-  <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d H:i:s")]}</td>
+  <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d")]}</td>
   <td align="right">
     {[if (inpack.OpPermAllow(v.op_perm, inpack.OpPermWrite)) {]}
     <button onclick="inpack.PackageSet('{[=v.meta.id]}')"

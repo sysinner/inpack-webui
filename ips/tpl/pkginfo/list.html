@@ -62,7 +62,6 @@
   <th>
     <div id="ips-infols-grpnav" class="dropdown">Groups</div>
   </th>
-  <th>Created</th>
   <th>Updated</th>
   <th></th>
 </tr>
@@ -92,8 +91,7 @@
       {[~]}
     {[~]}
   </td>
-  <td>{[=l4i.MetaTimeParseFormat(v.meta.created, "Y-m-d")]}</td>
-  <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d H:i:s")]}</td>
+  <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d")]}</td>
   <td align="right">
     {[if (inpack.OpPermAllow(v.op_perm, inpack.OpPermWrite)) {]}
     <button onclick="inpack.InfoSet('{[=v.meta.name]}')"
