@@ -371,8 +371,8 @@ inpack.InfoSet = function(name) {
 
             l4iModal.Open({
                 title: "Package Info Settings",
-                width: 600,
-                height: 400,
+                width: 800,
+                height: 450,
                 tplsrc: tpl,
                 success: function() {
 

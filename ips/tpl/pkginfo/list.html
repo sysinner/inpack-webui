@@ -69,12 +69,12 @@
 <tbody>
 {[~it.items :v]}
 <tr>
-  <td><img src="{[=it._api_url]}/pkg-info/icon?name={[=v.meta.name]}&type=11&size=64" width="26" height="26"></td>
-  <td>
+  <td class="align-middle"><img src="{[=it._api_url]}/pkg-info/icon?name={[=v.meta.name]}&type=11&size=64" width="26" height="26"></td>
+  <td class="align-middle">
     <a href="#pkginfo/view" onclick="inpack.InfoView('{[=v.meta.name]}')" class="item_title">{[=v.meta.name]}</a>
   </td>
-  <td>{[=v.last_version]}</td>
-  <td>
+  <td class="align-middle">{[=v.last_version]}</td>
+  <td class="align-middle">
     {[if (v.stat_num) {]}
     <button onclick="inpack.InfoPackageList('{[=v.meta.name]}')"
       class="incp-btn incp-btn-xsmall" style="width:50px;text-align:center">
@@ -82,7 +82,7 @@
     </button>
     {[}]}
   </td>
-  <td>
+  <td class="align-middle">
     {[~v.groups :vg]}
       {[~it.groups :g]}
       {[if (vg == g.name) {]}
@@ -91,11 +91,11 @@
       {[~]}
     {[~]}
   </td>
-  <td>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d")]}</td>
-  <td align="right">
+  <td class="align-middle">{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d")]}</td>
+  <td  class="align-middle" align="right">
     {[if (inpack.OpPermAllow(v.op_perm, inpack.OpPermWrite)) {]}
     <button onclick="inpack.InfoSet('{[=v.meta.name]}')"
-      class="pure-button button-xsmall pure-button-primary">
+      class="pure-button button-xsmall">
       <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Setting
     </button>
     {[}]}
