@@ -35,19 +35,6 @@
 <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="inpack.InfoListGroupSelector()">
   <span id="ips-infols-qry-grpvalue">{[=it.grpvalue]}</span> <span class="caret"></span>
 </a>
-<!--
-<ul class="dropdown-menu">
-  <li><a class="grpnav-item" href="#" label="Groups" onclick="inpack.InfoListGroupSelect()">All Groups</a></li>
-  {[~it.groups :v]}
-  <li>
-    <a class="grpnav-item" href="#{[=v.name]}"
-      onclick="inpack.InfoListGroupSelect('{[=v.name]}', '{[=v.value]}')">
-      {[=v.value]}
-    </a>
-  </li>
-  {[~]}
-</ul>
--->
 </script>
 
 <script id="ips-infols-tpl" type="text/html">
@@ -95,7 +82,7 @@
   <td  class="align-middle" align="right">
     {[if (inpack.OpPermAllow(v.op_perm, inpack.OpPermWrite)) {]}
     <button onclick="inpack.InfoSet('{[=v.meta.name]}')"
-      class="pure-button button-xsmall">
+      class="btn btn-sm btn-default">
       <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Setting
     </button>
     {[}]}

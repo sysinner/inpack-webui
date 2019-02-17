@@ -716,9 +716,9 @@ inpack.PackageListRefresh = function(tplid, pkgname, optools_off) {
                     dstid: tplid + "-chans",
                     tplid: tplid + "-chans-tpl",
                     data: {
-                        channels: channels.items,
                         chanactive: inpack.pkgls_chanactive,
                         chanvalue: inpack.pkgls_chanvalue,
+                        // items: channels.items,
                     },
                 });
             }
@@ -751,6 +751,47 @@ inpack.PackageListRefresh = function(tplid, pkgname, optools_off) {
             callback: ep.done("pkgls"),
         });
     });
+}
+
+inpack.PackageListChannelSelector = function() {
+
+    l4iModal.Open({
+        title: "Select Channel",
+        width: 900,
+        height: 300,
+        tplid: "ips-pkgls-chans-selector-tpl",
+        data: {
+			items: inpack.cc_channels.items,
+            chanactive: inpack.pkgls_chanactive,
+            chanvalue: inpack.pkgls_chanvalue,
+		},
+        buttons: [
+            {
+                onclick: "l4iModal.Close()",
+                title: "Close",
+            },
+        ],
+    });
+}
+
+inpack.PackageListChannelSelect = function(chan_name, value) {
+
+    l4iModal.Close();
+
+    if (!chan_name) {
+        chan_name = "";
+    }
+    inpack.pkgls_chanactive = chan_name;
+    if ((!value || value.length < 1) && chan_name.length < 1) {
+        inpack.pkgls_chanvalue = "Channels";
+    } else {
+        inpack.pkgls_chanvalue = chan_name;
+    }
+
+
+    $("#ips-pkgls-qry-chanvalue").text(inpack.pkgls_chanvalue);
+
+    inpack.PackageListRefresh();
 }
 
 inpack.PackageSet = function(id) {
