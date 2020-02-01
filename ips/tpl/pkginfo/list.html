@@ -78,7 +78,7 @@
       {[~]}
     {[~]}
   </td>
-  <td class="align-middle">{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d")]}</td>
+  <td class="align-middle">{[=l4i.UnixMillisecondFormat(v.meta.updated, "Y-m-d")]}</td>
   <td  class="align-middle" align="right">
     {[if (inpack.OpPermAllow(v.op_perm, inpack.OpPermWrite)) {]}
     <button onclick="inpack.InfoSet('{[=v.meta.name]}')"
@@ -104,7 +104,7 @@
   <div class="status">
     <div class="title">{[=v.meta.name]}</div>
     Version: <strong>{[=v.last_version]}</strong> &nbsp;&nbsp;
-    Updated: <strong>{[=l4i.MetaTimeParseFormat(v.meta.updated, "Y-m-d")]}</strong>
+    Updated: <strong>{[=l4i.UnixMillisecondFormat(v.meta.updated, "Y-m-d")]}</strong>
   </div>
 </li>
 {[~]}
