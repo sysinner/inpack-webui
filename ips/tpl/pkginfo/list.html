@@ -63,7 +63,7 @@
   <td class="align-middle">{[=v.last_version]}</td>
   <td class="align-middle">
     {[if (v.stat_num) {]}
-    <button onclick="inpack.InfoPackageList('{[=v.meta.name]}')"
+    <button onclick="inpack.InfoPackList('{[=v.meta.name]}')"
       class="incp-btn incp-btn-xsmall" style="width:50px;text-align:center">
       {[=v.stat_num]}
     </button>
@@ -142,7 +142,7 @@
   </form>
 </li>
 <!-- <li class="incp-btn incp-btn-primary">
-  <a href="#" onclick="inpack.PackageNew()">
+  <a href="#" onclick="inpack.PackNew()">
     Upload a New Package
   </a>
 </li> -->

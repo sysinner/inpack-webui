@@ -3,7 +3,7 @@ var inpack = {
     api: "/ips/v1/",
     nav_reged: false,
     channel_def: {
-        kind: "PackageChannel",
+        kind: "PackChannel",
         meta: {
             name: "",
         },
@@ -192,7 +192,7 @@ inpack.InfoListRefresh = function(tplid, optools_off) {
                     return l4i.InnerAlert(alert_id, 'alert-danger', "Network Error");
                 }
 
-                if (info.kind != "PackageInfoList" || !info.items) {
+                if (info.kind != "PackInfoList" || !info.items) {
                     info.items = [];
                 }
 
@@ -316,9 +316,9 @@ inpack.InfoListStyle = function(s) {
     inpack.InfoListRefresh();
 }
 
-inpack.InfoPackageList = function(name) {
+inpack.InfoPackList = function(name) {
     inpack.NavBack(inpack.InfoListRefresh);
-    inpack.PackageListRefresh(null, name);
+    inpack.PackListRefresh(null, name);
 }
 
 
@@ -360,7 +360,7 @@ inpack.InfoSet = function(name) {
 
         var ep = EventProxy.create("tpl", "data", function(tpl, data) {
 
-            if (!data || data.kind != "PackageInfo") {
+            if (!data || data.kind != "PackInfo") {
                 return;
             }
 
@@ -433,7 +433,7 @@ inpack.InfoSetCommit = function() {
                 return l4i.InnerAlert(alertid, 'alert-danger', err);
             }
 
-            if (!rsj || rsj.kind != "PackageInfo") {
+            if (!rsj || rsj.kind != "PackInfo") {
 
                 var msg = "Bad Request";
                 if (rsj.error) {
@@ -458,7 +458,7 @@ inpack.InfoView = function(name) {
 
         var ep = EventProxy.create("tpl", "data", "pkgs", "groups", function(tpl, data, pkgs, groups) {
 
-            if (!data || data.kind != "PackageInfo") {
+            if (!data || data.kind != "PackInfo") {
                 return;
             }
 
@@ -479,7 +479,7 @@ inpack.InfoView = function(name) {
             data._api_url = inpack.api;
 
             l4iModal.Open({
-                title: "Package Info : " + data.meta.name,
+                title: "Pack Info : " + data.meta.name,
                 width: 900,
                 height: 600,
                 tplsrc: tpl,
@@ -520,7 +520,7 @@ inpack.InfoView = function(name) {
 }
 
 
-inpack.PackageNew = function() {
+inpack.PackNew = function() {
     seajs.use(["ep"], function(EventProxy) {
 
         var ep = EventProxy.create("tpl", "channels", function(tpl, channels) {
@@ -558,7 +558,7 @@ inpack.PackageNew = function() {
     });
 }
 
-inpack.PackageNewCommit = function() {
+inpack.PackNewCommit = function() {
     var files = document.getElementById('ips-pkgnew-file').files,
         alertid = "#ips-pkgnew-alert";
 
@@ -585,7 +585,7 @@ inpack.PackageNewCommit = function() {
                 }
 
                 var req = {
-                    kind: "PackageCommit",
+                    kind: "PackCommit",
                     size: file.size,
                     name: file.name,
                     data: e.target.result,
@@ -615,7 +615,7 @@ inpack.PackageNewCommit = function() {
                             return;
                         }
 
-                        if (rsj.kind != "PackageCommit") {
+                        if (rsj.kind != "PackCommit") {
                             l4i.InnerAlert(alertid, 'alert-danger', "unknown error");
                             return;
                         }
@@ -635,14 +635,14 @@ inpack.PackageNewCommit = function() {
     }
 }
 
-inpack.PackageList = function() {
+inpack.PackList = function() {
     inpack.pkgls_pkgactive = null;
     inpack.pkgls_chanactive = "";
     inpack.pkgls_chanvalue = "Channels";
-    inpack.PackageListRefresh();
+    inpack.PackListRefresh();
 }
 
-inpack.PackageListRefresh = function(tplid, pkgname, optools_off) {
+inpack.PackListRefresh = function(tplid, pkgname, optools_off) {
     if (pkgname) {
         inpack.pkgls_pkgactive = pkgname;
     }
@@ -681,7 +681,7 @@ inpack.PackageListRefresh = function(tplid, pkgname, optools_off) {
                 channels.items = [];
             }
 
-            if (!pkgls || !pkgls.kind || pkgls.kind != "PackageList" || !pkgls.items) {
+            if (!pkgls || !pkgls.kind || pkgls.kind != "PackList" || !pkgls.items) {
                 pkgls.items = [];
             }
 
@@ -753,7 +753,7 @@ inpack.PackageListRefresh = function(tplid, pkgname, optools_off) {
     });
 }
 
-inpack.PackageListChannelSelector = function() {
+inpack.PackListChannelSelector = function() {
 
     l4iModal.Open({
         title: "Select Channel",
@@ -774,7 +774,7 @@ inpack.PackageListChannelSelector = function() {
     });
 }
 
-inpack.PackageListChannelSelect = function(chan_name, value) {
+inpack.PackListChannelSelect = function(chan_name, value) {
 
     l4iModal.Close();
 
@@ -791,15 +791,15 @@ inpack.PackageListChannelSelect = function(chan_name, value) {
 
     $("#ips-pkgls-qry-chanvalue").text(inpack.pkgls_chanvalue);
 
-    inpack.PackageListRefresh();
+    inpack.PackListRefresh();
 }
 
-inpack.PackageSet = function(id) {
+inpack.PackSet = function(id) {
     seajs.use(["ep"], function(EventProxy) {
 
         var ep = EventProxy.create("tpl", "channels", "pkg", function(tpl, channels, pkg) {
 
-            if (!pkg || pkg.kind != "Package") {
+            if (!pkg || pkg.kind != "Pack") {
                 return;
             }
 
@@ -843,7 +843,7 @@ inpack.PackageSet = function(id) {
                         title: "Close",
                     },
                     {
-                        onclick: "inpack.PackageSetCommit()",
+                        onclick: "inpack.PackSetCommit()",
                         title: "Save",
                         style: "btn-primary",
                     },
@@ -878,7 +878,7 @@ inpack.PackageSet = function(id) {
     });
 }
 
-inpack.PackageSetCommit = function() {
+inpack.PackSetCommit = function() {
     var alertid = "#ips-pkgset-alert",
         form = $("#ips-pkgset");
     if (!form) {
@@ -902,7 +902,7 @@ inpack.PackageSetCommit = function() {
         data: JSON.stringify(req),
         callback: function(err, rsj) {
 
-            if (!rsj || rsj.kind != "Package") {
+            if (!rsj || rsj.kind != "Pack") {
                 var msg = "Bad Request";
                 if (rsj.error !== undefined) {
                     msg = rsj.error.message;
@@ -915,7 +915,7 @@ inpack.PackageSetCommit = function() {
 
             window.setTimeout(function() {
                 l4iModal.Close();
-                inpack.PackageListRefresh();
+                inpack.PackListRefresh();
             }, 1000);
         },
         error: function(xhr, textStatus, error) {
@@ -940,7 +940,7 @@ inpack.ChannelListRefresh = function() {
                 rsj = {};
             }
 
-            if (!rsj.kind || rsj.kind != "PackageChannelList" || !rsj.items) {
+            if (!rsj.kind || rsj.kind != "PackChannelList" || !rsj.items) {
                 rsj.items = [];
             }
 
@@ -998,7 +998,7 @@ inpack.ChannelDelete = function(name) {
     l4i.Ajax(inpack.apipath("channel/delete?name=" + name), {
         callback: function(err, rsj) {
 
-            if (!rsj || rsj.kind != "PackageChannel") {
+            if (!rsj || rsj.kind != "PackChannel") {
                 var msg = "Bad Request";
                 if (rsj.error) {
                     msg = rsj.error.message;
@@ -1024,7 +1024,7 @@ inpack.ChannelSet = function(name) {
 
         var ep = EventProxy.create('tpl', 'data', 'roles', function(tpl, rsj, roles) {
 
-            if (!rsj || rsj.error || !rsj.kind || rsj.kind != "PackageChannel") {
+            if (!rsj || rsj.error || !rsj.kind || rsj.kind != "PackChannel") {
                 rsj = l4i.Clone(inpack.channel_def);
             }
 
@@ -1155,7 +1155,7 @@ inpack.ChannelSetCommit = function() {
         data: JSON.stringify(req),
         callback: function(err, rsj) {
 
-            if (!rsj || rsj.kind != "PackageChannel") {
+            if (!rsj || rsj.kind != "PackChannel") {
                 var msg = "Bad Request";
                 if (rsj.error) {
                     msg = rsj.error.message;
@@ -1189,7 +1189,7 @@ inpack.ChannelImportConfirm = function() {
     l4i.Ajax(inpack.apipath("channel/list"), {
         callback: function(err, rsj) {
 
-            if (!rsj || rsj.kind != "PackageChannelList") {
+            if (!rsj || rsj.kind != "PackChannelList") {
                 return l4i.InnerAlert("#p4e5v1", 'alert-danger', "No Package Service Detected from this API");
             }
 
@@ -1242,7 +1242,7 @@ inpack.ChannelImportSave = function() {
             continue;
         }
 
-        channel.kind = "PackageChannel";
+        channel.kind = "PackChannel";
         var alertid = "#ips-channel-import-id-" + channel.meta.name;
 
         l4i.Ajax(inpack.apipath("channel/set"), {

@@ -81,7 +81,7 @@
 
 $("#ips-pkgls-s6r-qry").submit(function(event) {
     event.preventDefault();
-    inpack.PackageListRefresh("ips-pkgls-s6r");
+    inpack.PackListRefresh("ips-pkgls-s6r");
 });
 
 function _ips_pkgls_chanselect(chan_name, value)
@@ -98,7 +98,7 @@ function _ips_pkgls_chanselect(chan_name, value)
 
     $("#ips-pkgls-s6r-qry-chanvalue").text(inpack.pkgls_chanvalue);
 
-    inpack.PackageListRefresh();
+    inpack.PackListRefresh();
 }
 
 function _ips_pkgls_select_pkg(id)
