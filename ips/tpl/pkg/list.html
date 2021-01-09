@@ -66,8 +66,8 @@
   {[~]}
   </td>
   <td>{[=inpack.UtilResourceSizeFormat(v.size, 2)]}</td>
-  <td>{[=l4i.UnixMillisecondFormat(v.built, "Y-m-d")]}</td>
-  <td>{[=l4i.UnixMillisecondFormat(v.meta.updated, "Y-m-d")]}</td>
+  <td>{[=valueui.utilx.UnixMillisecondFormat(v.built, "Y-m-d")]}</td>
+  <td>{[=valueui.utilx.UnixMillisecondFormat(v.meta.updated, "Y-m-d")]}</td>
   <td align="right">
     {[if (inpack.OpPermAllow(v.op_perm, inpack.OpPermWrite)) {]}
     <button onclick="inpack.PackSet('{[=v.meta.id]}')"

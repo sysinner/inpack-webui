@@ -1,7 +1,7 @@
 
 <div id="ips-pkgset-404" class="alert alert-danger" style="display:none">
   <p>No Package Found</p>
-  <button type="button" class="btn btn-default btn-sm" onclick="l4iModal.Close()">Close</button>
+  <button type="button" class="btn btn-default btn-sm" onclick="valueui.modal.Close()">Close</button>
 </div>
 
 <div id="ips-pkgset" style="box-sizing: border-box;">loading</div>
@@ -10,14 +10,14 @@
   <div id="ips-pkgset-alert" class="alert alert-danger hide">...</div>
   <input type="hidden" name="id" value="{[=it.pkg.meta.id]}">
 
-  <div class="l4i-form-group">
+  <div class="valueui-form-group">
     <label>Package</label>
     <p>{[=it.pkg.meta.name]}</p>
   </div>
 
-  <div class="l4i-form-group">
+  <div class="valueui-form-group">
     <label>Select a Channel</label>
-    <select class="l4i-form-control" name="channel">
+    <select class="valueui-form-control" name="channel">
     {[~it.channels.items :v]}
       <option value="{[=v.meta.name]}" {[if (v.meta.name == it.pkg.channel) { ]}selected{[ } ]}>{[=v.vendor_name]} / {[=v.meta.name]}</option>
     {[~]}

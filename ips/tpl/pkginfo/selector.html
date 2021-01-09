@@ -68,7 +68,7 @@
       {[~]}
     {[~]}
   </td>
-  <td>{[=l4i.UnixMillisecondFormat(v.meta.updated, "Y-m-d")]}</td>
+  <td>{[=valueui.utilx.UnixMillisecondFormat(v.meta.updated, "Y-m-d")]}</td>
   <td align="center">
     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
   </td>
@@ -87,18 +87,18 @@ $("#ips-infols-s6r-qry").submit(function(event) {
 
 function _ips_infols_pkgselect(name)
 {
-    l4iModal.Open({
+    valueui.modal.Open({
         id     : "ips-infols-s6r-pkgls",
         title  : "Select a Package to Launch",
         tpluri : "/in/cp/ips/~/ips/tpl/pkg/selector.html",
-        fn_selector : l4iModal.CurOptions.fn_selector,
+        fn_selector : valueui.modal.CurOptions.fn_selector,
         success: function() {
             // $("#ips-pkgls-s6r-qry-name").val(name);
             inpack.PackListRefresh("ips-pkgls-s6r", name);
         },
         buttons : [
             {
-                onclick: "l4iModal.Close()",
+                onclick: "valueui.modal.Close()",
                 title: "Close",
             },
         ],

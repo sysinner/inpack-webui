@@ -1,7 +1,7 @@
 
 <div id="ips-infoset-404" class="alert alert-danger" style="display:none">
   <p>No Package Found</p>
-  <button type="button" class="btn btn-default btn-sm" onclick="l4iModal.Close()">Close</button>
+  <button type="button" class="btn btn-default btn-sm" onclick="valueui.modal.Close()">Close</button>
 </div>
 
 <div id="ips-infoset" style="box-sizing: border-box;">loading</div>
@@ -10,13 +10,13 @@
   <div id="ips-infoset-alert" class="alert alert-danger hide">...</div>
   <input type="hidden" name="name" value="{[=it.info.meta.name]}">
 
-  <div class="l4i-form-group">
+  <div class="valueui-form-group">
     <label>Package</label>
     <p>{[=it.info.meta.name]}</p>
   </div>
 
-  <div class="l4i-form-group">
+  <div class="valueui-form-group">
     <label>Description</label>
-    <textarea class="l4i-form-control" name="project_description" rows="4">{[=it.info.project.description]}</textarea>
+    <textarea class="valueui-form-control" name="project_description" rows="4">{[=it.info.project.description]}</textarea>
   </div>
 </script>
