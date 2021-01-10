@@ -52,7 +52,7 @@ inpack.OpPermAllow = function (p, perms) {
 };
 
 inpack.tplWorkLoader = function (uri) {
-    valueui.utilx.Ajax(inpack.tplpath(uri), {
+    valueui.utilx.ajax(inpack.tplpath(uri), {
         callback: function (err, data) {
             if (err) {
                 return;
@@ -109,8 +109,8 @@ inpack.Index = function (options) {
     $("#" + inpack.option_dstid).html(divstr);
 
     if (!inpack.nav_reged) {
-        valueui.url.EventRegister("ips/pkginfo", inpack.InfoListRefresh, "ipscp-navbar");
-        valueui.url.EventRegister("ips/channel", inpack.ChannelListRefresh, "ipscp-navbar");
+        valueui.url.eventRegister("ips/pkginfo", inpack.InfoListRefresh, "ipscp-navbar");
+        valueui.url.eventRegister("ips/channel", inpack.ChannelListRefresh, "ipscp-navbar");
         inpack.nav_reged = true;
     }
 
@@ -118,21 +118,21 @@ inpack.Index = function (options) {
         inpack.option_dstid = options.dstid;
     }
     if (!inpack.pkginfo_list_optools_style) {
-        inpack.pkginfo_list_optools_style = valueui.storage.Get("pkginfo_list_optools_style");
+        inpack.pkginfo_list_optools_style = valueui.storage.get("pkginfo_list_optools_style");
     }
 
-    var ep = valueui.NewEventProxy("info", function (info) {
+    var ep = valueui.newEventProxy("info", function (info) {
         if (info && info.user_channel_write === true) {
             inpack.Status.user_channel_write = true;
         }
-        valueui.url.EventHandler("ips/pkginfo", true);
+        valueui.url.eventHandler("ips/pkginfo", true);
     });
 
     ep.fail(function (err) {
         alert("Network Abort, Please try again later");
     });
 
-    valueui.utilx.Ajax(inpack.apipath("status/info"), {
+    valueui.utilx.ajax(inpack.apipath("status/info"), {
         callback: ep.done("info"),
     });
 };
@@ -157,7 +157,7 @@ inpack.InfoListRefresh = function (tplid, optools_off) {
         }
     }
 
-    var ep = valueui.NewEventProxy(
+    var ep = valueui.newEventProxy(
         "tpl",
         "channels",
         "groups",
@@ -173,7 +173,7 @@ inpack.InfoListRefresh = function (tplid, optools_off) {
                         display: "block",
                     });
                 }
-                return valueui.alert.InnerShow(
+                return valueui.alert.innerShow(
                     alert_id,
                     "alert-danger",
                     "No available, or authorized channels can be accessed"
@@ -199,7 +199,7 @@ inpack.InfoListRefresh = function (tplid, optools_off) {
             }
 
             if (!info || (!info.error && !info.kind)) {
-                return valueui.alert.InnerShow(alert_id, "alert-danger", "Network Error");
+                return valueui.alert.innerShow(alert_id, "alert-danger", "Network Error");
             }
 
             if (info.kind != "PackInfoList" || !info.items) {
@@ -248,7 +248,7 @@ inpack.InfoListRefresh = function (tplid, optools_off) {
                 if (elem && elem.innerHTML.length > 50) {
                     return;
                 }
-                valueui.template.Render({
+                valueui.template.render({
                     dstid: dstid_nav,
                     tplid: tplid + "-grpnav-tpl",
                     data: {
@@ -264,7 +264,7 @@ inpack.InfoListRefresh = function (tplid, optools_off) {
             if (inpack.pkginfo_list_optools_style == "th") {
                 tplid_style = tplid + "-th-tpl";
             }
-            valueui.template.Render({
+            valueui.template.render({
                 dstid: tplid,
                 tplid: tplid_style,
                 data: {
@@ -291,7 +291,7 @@ inpack.InfoListRefresh = function (tplid, optools_off) {
     if (document.getElementById(tplid)) {
         ep.emit("tpl", null);
     } else {
-        valueui.utilx.Ajax(inpack.tplpath("pkginfo/list"), {
+        valueui.utilx.ajax(inpack.tplpath("pkginfo/list"), {
             callback: ep.done("tpl"),
         });
     }
@@ -299,7 +299,7 @@ inpack.InfoListRefresh = function (tplid, optools_off) {
     if (inpack.cc_channels && inpack.cc_channels.items.length > 0) {
         ep.emit("channels", inpack.cc_channels);
     } else {
-        valueui.utilx.Ajax(inpack.apipath("channel/list"), {
+        valueui.utilx.ajax(inpack.apipath("channel/list"), {
             callback: ep.done("channels"),
         });
     }
@@ -307,12 +307,12 @@ inpack.InfoListRefresh = function (tplid, optools_off) {
     if (inpack.cc_groups && inpack.cc_groups.items.length > 0) {
         ep.emit("groups", inpack.cc_groups);
     } else {
-        valueui.utilx.Ajax(inpack.apipath("group/list"), {
+        valueui.utilx.ajax(inpack.apipath("group/list"), {
             callback: ep.done("groups"),
         });
     }
 
-    valueui.utilx.Ajax(inpack.apipath("pkg-info/list" + uri), {
+    valueui.utilx.ajax(inpack.apipath("pkg-info/list" + uri), {
         callback: ep.done("info"),
     });
 };
@@ -322,7 +322,7 @@ inpack.InfoListStyle = function (s) {
         return;
     }
     inpack.pkginfo_list_optools_style = s;
-    valueui.storage.Set("pkginfo_list_optools_style", s);
+    valueui.storage.set("pkginfo_list_optools_style", s);
     inpack.InfoListRefresh();
 };
 
@@ -332,7 +332,7 @@ inpack.InfoPackList = function (name) {
 };
 
 inpack.InfoListGroupSelector = function () {
-    valueui.modal.Open({
+    valueui.modal.open({
         title: "Select Group",
         width: 960,
         height: "max",
@@ -340,7 +340,7 @@ inpack.InfoListGroupSelector = function () {
         data: inpack.cc_groups,
         buttons: [
             {
-                onclick: "valueui.modal.Close()",
+                onclick: "valueui.modal.close()",
                 title: "Close",
             },
         ],
@@ -348,7 +348,7 @@ inpack.InfoListGroupSelector = function () {
 };
 
 inpack.InfoListGroupSelect = function (grp_name, grp_value) {
-    valueui.modal.Close();
+    valueui.modal.close();
     if (!grp_name) {
         grp_name = "";
     }
@@ -364,7 +364,7 @@ inpack.InfoListGroupSelect = function (grp_name, grp_value) {
 };
 
 inpack.InfoSet = function (name) {
-    var ep = valueui.NewEventProxy("tpl", "data", function (tpl, data) {
+    var ep = valueui.newEventProxy("tpl", "data", function (tpl, data) {
         if (!data || data.kind != "PackInfo") {
             return;
         }
@@ -374,13 +374,13 @@ inpack.InfoSet = function (name) {
             data.project.description = "";
         }
 
-        valueui.modal.Open({
+        valueui.modal.open({
             title: "Package Info Settings",
             width: 800,
             height: 450,
             tplsrc: tpl,
             success: function () {
-                valueui.template.Render({
+                valueui.template.render({
                     dstid: "ips-infoset",
                     tplid: "ips-infoset-tpl",
                     data: {
@@ -390,7 +390,7 @@ inpack.InfoSet = function (name) {
             },
             buttons: [
                 {
-                    onclick: "valueui.modal.Close()",
+                    onclick: "valueui.modal.close()",
                     title: "Close",
                 },
                 {
@@ -406,11 +406,11 @@ inpack.InfoSet = function (name) {
         alert("Network Abort, Please try again later");
     });
 
-    valueui.utilx.Ajax(inpack.apipath("pkg-info/entry?name=" + name), {
+    valueui.utilx.ajax(inpack.apipath("pkg-info/entry?name=" + name), {
         callback: ep.done("data"),
     });
 
-    valueui.utilx.Ajax(inpack.tplpath("pkginfo/set"), {
+    valueui.utilx.ajax(inpack.tplpath("pkginfo/set"), {
         callback: ep.done("tpl"),
     });
 };
@@ -427,12 +427,12 @@ inpack.InfoSetCommit = function () {
         },
     };
 
-    valueui.utilx.Ajax(inpack.apipath("pkg-info/set"), {
+    valueui.utilx.ajax(inpack.apipath("pkg-info/set"), {
         method: "POST",
         data: JSON.stringify(req),
         callback: function (err, rsj) {
             if (err) {
-                return valueui.alert.InnerShow(alertid, "alert-danger", err);
+                return valueui.alert.innerShow(alertid, "alert-danger", err);
             }
 
             if (!rsj || rsj.kind != "PackInfo") {
@@ -441,13 +441,13 @@ inpack.InfoSetCommit = function () {
                     msg = rsj.error.message;
                 }
 
-                return valueui.alert.InnerShow(alertid, "alert-danger", msg);
+                return valueui.alert.innerShow(alertid, "alert-danger", msg);
             }
 
-            valueui.alert.InnerShow(alertid, "alert-success", "Successful operation");
+            valueui.alert.innerShow(alertid, "alert-success", "Successful operation");
 
             window.setTimeout(function () {
-                valueui.modal.Close();
+                valueui.modal.close();
                 inpack.InfoListRefresh();
             }, 1000);
         },
@@ -455,7 +455,7 @@ inpack.InfoSetCommit = function () {
 };
 
 inpack.InfoView = function (name) {
-    var ep = valueui.NewEventProxy(
+    var ep = valueui.newEventProxy(
         "tpl",
         "data",
         "pkgs",
@@ -481,7 +481,7 @@ inpack.InfoView = function (name) {
             }
             data._api_url = inpack.api;
 
-            valueui.modal.Open({
+            valueui.modal.open({
                 title: "Pack Info : " + data.meta.name,
                 width: 900,
                 height: 600,
@@ -489,7 +489,7 @@ inpack.InfoView = function (name) {
                 data: data,
                 buttons: [
                     {
-                        onclick: "valueui.modal.Close()",
+                        onclick: "valueui.modal.close()",
                         title: "Close",
                     },
                 ],
@@ -501,36 +501,36 @@ inpack.InfoView = function (name) {
         alert("Network Abort, Please try again later");
     });
 
-    valueui.utilx.Ajax(inpack.apipath("pkg-info/entry?name=" + name), {
+    valueui.utilx.ajax(inpack.apipath("pkg-info/entry?name=" + name), {
         callback: ep.done("data"),
     });
 
-    valueui.utilx.Ajax(inpack.apipath("pkg/list?name=" + name), {
+    valueui.utilx.ajax(inpack.apipath("pkg/list?name=" + name), {
         callback: ep.done("pkgs"),
     });
 
     if (inpack.cc_groups && inpack.cc_groups.items.length > 0) {
         ep.emit("groups", inpack.cc_groups);
     } else {
-        valueui.utilx.Ajax(inpack.apipath("group/list"), {
+        valueui.utilx.ajax(inpack.apipath("group/list"), {
             callback: ep.done("groups"),
         });
     }
 
-    valueui.utilx.Ajax(inpack.tplpath("pkginfo/view"), {
+    valueui.utilx.ajax(inpack.tplpath("pkginfo/view"), {
         callback: ep.done("tpl"),
     });
 };
 
 inpack.PackNew = function () {
-    var ep = valueui.NewEventProxy("tpl", "channels", function (tpl, channels) {
+    var ep = valueui.newEventProxy("tpl", "channels", function (tpl, channels) {
         if (!channels.items || channels.items.length < 1) {
             return inpack.ChannelSet();
         }
 
         $("#work-content").html(tpl);
 
-        valueui.template.Render({
+        valueui.template.render({
             dstid: "ips-pkgnew",
             tplid: "ips-pkgnew-tpl",
             data: {
@@ -546,12 +546,12 @@ inpack.PackNew = function () {
     if (inpack.cc_channels) {
         ep.emit("channels", inpack.cc_channels);
     } else {
-        valueui.utilx.Ajax(inpack.apipath("channel/list"), {
+        valueui.utilx.ajax(inpack.apipath("channel/list"), {
             callback: ep.done("channels"),
         });
     }
 
-    valueui.utilx.Ajax(inpack.tplpath("pkg/new"), {
+    valueui.utilx.ajax(inpack.tplpath("pkg/new"), {
         callback: ep.done("tpl"),
     });
 };
@@ -561,13 +561,13 @@ inpack.PackNewCommit = function () {
         alertid = "#ips-pkgnew-alert";
 
     if (!files.length) {
-        valueui.alert.InnerShow(alertid, "alert-danger", "Please select a file");
+        valueui.alert.innerShow(alertid, "alert-danger", "Please select a file");
         return;
     }
 
     for (var i = 0, file; (file = files[i]); i++) {
         if (file.size > 100 * 1024 * 1024) {
-            valueui.alert.InnerShow(alertid, "alert-danger", "The file is too large to upload");
+            valueui.alert.innerShow(alertid, "alert-danger", "The file is too large to upload");
             return;
         }
 
@@ -588,23 +588,23 @@ inpack.PackNewCommit = function () {
                     channel: $("#ips-pkgnew").find("select[name=channel]").val(),
                 };
 
-                valueui.utilx.Ajax(inpack.apipath("pkg/commit"), {
+                valueui.utilx.ajax(inpack.apipath("pkg/commit"), {
                     method: "POST",
                     data: JSON.stringify(req),
                     timeout: 600000,
                     callback: function (err, rsj) {
                         if (err || !rsj) {
                             if (err) {
-                                return valueui.alert.InnerShow(alertid, "alert-danger", err);
+                                return valueui.alert.innerShow(alertid, "alert-danger", err);
                             }
                             if (rsj && rsj.error) {
-                                return valueui.alert.InnerShow(
+                                return valueui.alert.innerShow(
                                     alertid,
                                     "alert-danger",
                                     rsj.error.message
                                 );
                             }
-                            return valueui.alert.InnerShow(
+                            return valueui.alert.innerShow(
                                 alertid,
                                 "alert-danger",
                                 "Can not connect service"
@@ -612,16 +612,16 @@ inpack.PackNewCommit = function () {
                         }
 
                         if (rsj.error) {
-                            valueui.alert.InnerShow(alertid, "alert-danger", rsj.error.message);
+                            valueui.alert.innerShow(alertid, "alert-danger", rsj.error.message);
                             return;
                         }
 
                         if (rsj.kind != "PackCommit") {
-                            valueui.alert.InnerShow(alertid, "alert-danger", "unknown error");
+                            valueui.alert.innerShow(alertid, "alert-danger", "unknown error");
                             return;
                         }
 
-                        valueui.alert.InnerShow(alertid, "alert-success", "Successfully commit");
+                        valueui.alert.innerShow(alertid, "alert-success", "Successfully commit");
 
                         window.setTimeout(function () {
                             inpack.tplWorkLoader("pkginfo/list");
@@ -666,7 +666,7 @@ inpack.PackListRefresh = function (tplid, pkgname, optools_off) {
         }
     }
 
-    var ep = valueui.NewEventProxy("tpl", "channels", "pkgls", function (tpl, channels, pkgls) {
+    var ep = valueui.newEventProxy("tpl", "channels", "pkgls", function (tpl, channels, pkgls) {
         if (tpl) {
             $("#work-content").html(tpl);
         }
@@ -698,7 +698,7 @@ inpack.PackListRefresh = function (tplid, pkgname, optools_off) {
             });
         }
 
-        valueui.template.Render({
+        valueui.template.render({
             dstid: tplid,
             tplid: tplid + "-tpl",
             data: {
@@ -709,7 +709,7 @@ inpack.PackListRefresh = function (tplid, pkgname, optools_off) {
         });
 
         if (tpl) {
-            valueui.template.Render({
+            valueui.template.render({
                 dstid: tplid + "-chans",
                 tplid: tplid + "-chans-tpl",
                 data: {
@@ -731,7 +731,7 @@ inpack.PackListRefresh = function (tplid, pkgname, optools_off) {
     if (document.getElementById(tplid)) {
         ep.emit("tpl", null);
     } else {
-        valueui.utilx.Ajax(inpack.tplpath("pkg/list"), {
+        valueui.utilx.ajax(inpack.tplpath("pkg/list"), {
             callback: ep.done("tpl"),
         });
     }
@@ -739,18 +739,18 @@ inpack.PackListRefresh = function (tplid, pkgname, optools_off) {
     if (inpack.cc_channels && inpack.cc_channels.items.length > 0) {
         ep.emit("channels", inpack.cc_channels);
     } else {
-        valueui.utilx.Ajax(inpack.apipath("channel/list"), {
+        valueui.utilx.ajax(inpack.apipath("channel/list"), {
             callback: ep.done("channels"),
         });
     }
 
-    valueui.utilx.Ajax(inpack.apipath("pkg/list" + uri), {
+    valueui.utilx.ajax(inpack.apipath("pkg/list" + uri), {
         callback: ep.done("pkgls"),
     });
 };
 
 inpack.PackListChannelSelector = function () {
-    valueui.modal.Open({
+    valueui.modal.open({
         title: "Select Channel",
         width: 900,
         height: 300,
@@ -762,7 +762,7 @@ inpack.PackListChannelSelector = function () {
         },
         buttons: [
             {
-                onclick: "valueui.modal.Close()",
+                onclick: "valueui.modal.close()",
                 title: "Close",
             },
         ],
@@ -770,7 +770,7 @@ inpack.PackListChannelSelector = function () {
 };
 
 inpack.PackListChannelSelect = function (chan_name, value) {
-    valueui.modal.Close();
+    valueui.modal.close();
 
     if (!chan_name) {
         chan_name = "";
@@ -788,7 +788,7 @@ inpack.PackListChannelSelect = function (chan_name, value) {
 };
 
 inpack.PackSet = function (id) {
-    var ep = valueui.NewEventProxy("tpl", "channels", "pkg", function (tpl, channels, pkg) {
+    var ep = valueui.newEventProxy("tpl", "channels", "pkg", function (tpl, channels, pkg) {
         if (!pkg || pkg.kind != "Pack") {
             return;
         }
@@ -813,13 +813,13 @@ inpack.PackSet = function (id) {
             actives[0].action = true;
         }
 
-        valueui.modal.Open({
+        valueui.modal.open({
             title: "Package Settings",
             width: 600,
             height: 400,
             tplsrc: tpl,
             success: function () {
-                valueui.template.Render({
+                valueui.template.render({
                     dstid: "ips-pkgset",
                     tplid: "ips-pkgset-tpl",
                     data: {
@@ -831,7 +831,7 @@ inpack.PackSet = function (id) {
             },
             buttons: [
                 {
-                    onclick: "valueui.modal.Close()",
+                    onclick: "valueui.modal.close()",
                     title: "Close",
                 },
                 {
@@ -854,16 +854,16 @@ inpack.PackSet = function (id) {
     if (inpack.cc_channels && inpack.cc_channels.items.length > 0) {
         ep.emit("channels", inpack.cc_channels);
     } else {
-        valueui.utilx.Ajax(inpack.apipath("channel/list"), {
+        valueui.utilx.ajax(inpack.apipath("channel/list"), {
             callback: ep.done("channels"),
         });
     }
 
-    valueui.utilx.Ajax(inpack.apipath("pkg/entry?id=" + id), {
+    valueui.utilx.ajax(inpack.apipath("pkg/entry?id=" + id), {
         callback: ep.done("pkg"),
     });
 
-    valueui.utilx.Ajax(inpack.tplpath("pkg/set"), {
+    valueui.utilx.ajax(inpack.tplpath("pkg/set"), {
         callback: ep.done("tpl"),
     });
 };
@@ -887,7 +887,7 @@ inpack.PackSetCommit = function () {
         req.op_perm = inpack.OpPermOff;
     }
 
-    valueui.utilx.Ajax(inpack.apipath("pkg/set"), {
+    valueui.utilx.ajax(inpack.apipath("pkg/set"), {
         method: "POST",
         data: JSON.stringify(req),
         callback: function (err, rsj) {
@@ -896,19 +896,19 @@ inpack.PackSetCommit = function () {
                 if (rsj.error !== undefined) {
                     msg = rsj.error.message;
                 }
-                valueui.alert.InnerShow(alertid, "alert-danger", msg);
+                valueui.alert.innerShow(alertid, "alert-danger", msg);
                 return;
             }
 
-            valueui.alert.InnerShow(alertid, "alert-success", "Successful operation");
+            valueui.alert.innerShow(alertid, "alert-success", "Successful operation");
 
             window.setTimeout(function () {
-                valueui.modal.Close();
+                valueui.modal.close();
                 inpack.PackListRefresh();
             }, 1000);
         },
         error: function (xhr, textStatus, error) {
-            valueui.alert.InnerShow(alertid, "alert-danger", textStatus + " " + xhr.responseText);
+            valueui.alert.innerShow(alertid, "alert-danger", textStatus + " " + xhr.responseText);
         },
     });
 };
@@ -919,7 +919,7 @@ inpack.ChannelListRefresh = function () {
     });
     var alertid = "#ips-channells-alert";
 
-    var ep = valueui.NewEventProxy("tpl", "data", function (tpl, rsj) {
+    var ep = valueui.newEventProxy("tpl", "data", function (tpl, rsj) {
         $("#work-content").html(tpl);
 
         if (!rsj) {
@@ -934,7 +934,7 @@ inpack.ChannelListRefresh = function () {
             if (inpack.Status.user_channel_write === true) {
                 return inpack.ChannelSet();
             }
-            return valueui.alert.InnerShow(
+            return valueui.alert.innerShow(
                 alertid,
                 "alert-danger",
                 "No available, or authorized channels can be accessed"
@@ -962,7 +962,7 @@ inpack.ChannelListRefresh = function () {
 
         inCp.OpToolsRefresh("#ips-channells-optools");
 
-        valueui.template.Render({
+        valueui.template.render({
             dstid: "ips-channells",
             tplid: "ips-channells-tpl",
             data: rsj,
@@ -974,27 +974,27 @@ inpack.ChannelListRefresh = function () {
         alert("ChannelSet error, Please try again later (EC:ips-channelset)");
     });
 
-    valueui.utilx.Ajax(inpack.tplpath("channel/list"), {
+    valueui.utilx.ajax(inpack.tplpath("channel/list"), {
         callback: ep.done("tpl"),
     });
 
-    valueui.utilx.Ajax(inpack.apipath("channel/list"), {
+    valueui.utilx.ajax(inpack.apipath("channel/list"), {
         callback: ep.done("data"),
     });
 };
 
 inpack.ChannelDelete = function (name) {
-    valueui.utilx.Ajax(inpack.apipath("channel/delete?name=" + name), {
+    valueui.utilx.ajax(inpack.apipath("channel/delete?name=" + name), {
         callback: function (err, rsj) {
             if (!rsj || rsj.kind != "PackChannel") {
                 var msg = "Bad Request";
                 if (rsj.error) {
                     msg = rsj.error.message;
                 }
-                return valueui.alert.InnerShow("#p4e5v1", "alert-danger", msg);
+                return valueui.alert.innerShow("#p4e5v1", "alert-danger", msg);
             }
 
-            valueui.alert.InnerShow("#p4e5v1", "alert-success", "Successful operation");
+            valueui.alert.innerShow("#p4e5v1", "alert-success", "Successful operation");
 
             window.setTimeout(function () {
                 inpack.cc_channels = null;
@@ -1002,15 +1002,15 @@ inpack.ChannelDelete = function (name) {
             }, 1000);
         },
         error: function (xhr, textStatus, error) {
-            valueui.alert.InnerShow("#p4e5v1", "alert-danger", textStatus + " " + xhr.responseText);
+            valueui.alert.innerShow("#p4e5v1", "alert-danger", textStatus + " " + xhr.responseText);
         },
     });
 };
 
 inpack.ChannelSet = function (name) {
-    var ep = valueui.NewEventProxy("tpl", "data", "roles", function (tpl, rsj, roles) {
+    var ep = valueui.newEventProxy("tpl", "data", "roles", function (tpl, rsj, roles) {
         if (!rsj || rsj.error || !rsj.kind || rsj.kind != "PackChannel") {
-            rsj = valueui.utilx.ObjectClone(inpack.channel_def);
+            rsj = valueui.utilx.objectClone(inpack.channel_def);
         }
 
         if (!rsj.stat_num) {
@@ -1029,7 +1029,7 @@ inpack.ChannelSet = function (name) {
             rsj.roles.write = [];
         }
 
-        rsj._roles = valueui.utilx.ObjectClone(roles.items);
+        rsj._roles = valueui.utilx.objectClone(roles.items);
         for (var i in rsj._roles) {
             for (var j in rsj.roles.read) {
                 if (rsj.roles.read[j] == rsj._roles[i].id) {
@@ -1047,7 +1047,7 @@ inpack.ChannelSet = function (name) {
 
         $("#work-content").html(tpl);
 
-        valueui.template.Render({
+        valueui.template.render({
             dstid: "ips-channelset",
             tplid: "ips-channelset-tpl",
             data: {
@@ -1062,14 +1062,14 @@ inpack.ChannelSet = function (name) {
         alert("ChannelSet error, Please try again later (EC:ips-channelset)");
     });
 
-    valueui.utilx.Ajax(inpack.tplpath("channel/set"), {
+    valueui.utilx.ajax(inpack.tplpath("channel/set"), {
         callback: ep.done("tpl"),
     });
 
     if (inpack.iamAppRoles) {
         ep.emit("roles", inpack.iamAppRoles);
     } else {
-        valueui.utilx.Ajax(inCp.base + "auth/app-role-list", {
+        valueui.utilx.ajax(inCp.base + "auth/app-role-list", {
             callback: function (err, data) {
                 if (err) {
                     return alert(err);
@@ -1086,7 +1086,7 @@ inpack.ChannelSet = function (name) {
     if (!name) {
         ep.emit("data", "");
     } else {
-        valueui.utilx.Ajax(inpack.apipath("channel/entry?name=" + name), {
+        valueui.utilx.ajax(inpack.apipath("channel/entry?name=" + name), {
             callback: ep.done("data"),
         });
     }
@@ -1127,10 +1127,10 @@ inpack.ChannelSetCommit = function () {
             }
         });
     } catch (err) {
-        return valueui.alert.InnerShow(alert_id, "alert-danger", err);
+        return valueui.alert.innerShow(alert_id, "alert-danger", err);
     }
 
-    valueui.utilx.Ajax(inpack.apipath("channel/set"), {
+    valueui.utilx.ajax(inpack.apipath("channel/set"), {
         method: "POST",
         data: JSON.stringify(req),
         callback: function (err, rsj) {
@@ -1139,10 +1139,10 @@ inpack.ChannelSetCommit = function () {
                 if (rsj.error) {
                     msg = rsj.error.message;
                 }
-                return valueui.alert.InnerShow(alertid, "alert-danger", msg);
+                return valueui.alert.innerShow(alertid, "alert-danger", msg);
             }
 
-            valueui.alert.InnerShow(alertid, "alert-success", "Successful operation");
+            valueui.alert.innerShow(alertid, "alert-success", "Successful operation");
 
             window.setTimeout(function () {
                 inpack.cc_channels = null;
@@ -1163,12 +1163,12 @@ inpack.ChannelImportConfirm = function () {
     var api = $("#ips-channel-import-api").val();
     $("#ips-channel-import-btn").attr("disabled", "disabled");
 
-    valueui.alert.InnerShow("#p4e5v1", "alert-info", "Pending");
+    valueui.alert.innerShow("#p4e5v1", "alert-info", "Pending");
 
-    valueui.utilx.Ajax(inpack.apipath("channel/list"), {
+    valueui.utilx.ajax(inpack.apipath("channel/list"), {
         callback: function (err, rsj) {
             if (!rsj || rsj.kind != "PackChannelList") {
-                return valueui.alert.InnerShow(
+                return valueui.alert.innerShow(
                     "#p4e5v1",
                     "alert-danger",
                     "No Package Service Detected from this API"
@@ -1190,7 +1190,7 @@ inpack.ChannelImportConfirm = function () {
 
             inpack.channelImportArray = rsj.items;
 
-            valueui.template.Render({
+            valueui.template.render({
                 dstid: "ips-channel-import",
                 tplid: "ips-channel-import-tpl",
                 data: {
@@ -1208,7 +1208,7 @@ inpack.ChannelImportConfirm = function () {
         },
         error: function () {
             // TODO
-            valueui.alert.InnerShow(
+            valueui.alert.innerShow(
                 "#p4e5v1",
                 "alert-danger",
                 "No Package Service Detected from this API"
@@ -1235,7 +1235,7 @@ inpack.ChannelImportSave = function () {
         channel.kind = "PackChannel";
         var alertid = "#ips-channel-import-id-" + channel.meta.name;
 
-        valueui.utilx.Ajax(inpack.apipath("channel/set"), {
+        valueui.utilx.ajax(inpack.apipath("channel/set"), {
             method: "POST",
             data: JSON.stringify(channel),
             async: false,
@@ -1257,7 +1257,7 @@ inpack.ChannelImportSave = function () {
             },
             error: function (xhr, textStatus, error) {
                 $(alertid).text(textStatus + " " + xhr.responseText);
-                // valueui.alert.InnerShow("#d8e0m0", 'alert-danger', textStatus+' '+xhr.responseText);
+                // valueui.alert.innerShow("#d8e0m0", 'alert-danger', textStatus+' '+xhr.responseText);
             },
         });
     }
