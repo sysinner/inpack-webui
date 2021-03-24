@@ -34,7 +34,7 @@
 <tr>
   <td class="row_title">Updated</td>
   <td>
-    {[=l4i.UnixMillisecondFormat(it.meta.updated, "Y-m-d")]}
+    {[=valueui.utilx.unixMillisecondFormat(it.meta.updated, "Y-m-d")]}
   </td>
 </tr>
 
@@ -109,7 +109,7 @@
         <td>{[=v.version.dist]}</td>
 		    <td align="center">{[=v.version.arch]}</td>
         <td align="right">{[=inpack.UtilResourceSizeFormat(v.size, 2)]}</td>
-        <td align="right">{[=l4i.UnixMillisecondFormat(v.built, "Y-m-d")]}</td>
+        <td align="right">{[=valueui.utilx.unixMillisecondFormat(v.built, "Y-m-d")]}</td>
       </tr>
       {[~]}
       </tbody>

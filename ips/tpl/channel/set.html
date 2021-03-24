@@ -7,7 +7,7 @@
 
   <div id="ips-channelset-alert" class="alert alert-danger hide">...</div>
 
-  <div class="l4i-form-group">
+  <div class="valueui-form-group">
     <label>Channel Name</label>
     {[if (it.channel.meta.name.length > 0) {]}
     <input type="text" name="name" class="form-control" value="{[=it.channel.meta.name]}" readonly>
@@ -17,7 +17,7 @@
     {[}]}
   </div>
 
-  <div class="l4i-form-group">
+  <div class="valueui-form-group">
     <label>Vendor Name</label>
     <input type="text" name="vendor_name" class="form-control" placeholder="Enter Vendor Name" value="{[=it.channel.vendor_name]}">
     <p class="help-block">Company or organization name. Use a <strong>short</strong>, easily identifiable name</p>
@@ -34,7 +34,7 @@
     <input type="text" name="vendor_api" class="form-control" placeholder="Enter Package Service URL" value="{[=it.channel.vendor_api]}">
   </div> -->
 
-  <div class="l4i-form-group">
+  <div class="valueui-form-group">
     <label>Readable Roles</label>
     <div>
       <span style="margin-right:10px">
@@ -52,7 +52,7 @@
     </div>
   </div>
 
-  <div class="l4i-form-group">
+  <div class="valueui-form-group">
     <label>Writable Roles</label>
     <div>
       <span style="margin-right:10px">
