@@ -379,7 +379,7 @@ inpack.InfoSet = function (name) {
             width: 800,
             height: 450,
             tplsrc: tpl,
-            success: function () {
+            callback: function () {
                 valueui.template.render({
                     dstid: "ips-infoset",
                     tplid: "ips-infoset-tpl",
@@ -818,7 +818,7 @@ inpack.PackSet = function (id) {
             width: 600,
             height: 400,
             tplsrc: tpl,
-            success: function () {
+            callback: function () {
                 valueui.template.render({
                     dstid: "ips-pkgset",
                     tplid: "ips-pkgset-tpl",
@@ -1196,7 +1196,7 @@ inpack.ChannelImportConfirm = function () {
                 data: {
                     channels: rsj.items,
                 },
-                success: function () {
+                callback: function () {
                     var div = $("#ips-channel-import-btn");
                     if (div) {
                         div.text("Confirm and Save");
