@@ -1,121 +1,123 @@
 <style>
-.ips_pkgview_p5 td {
-	padding: 5px 0;
-}
-.ips_pkgview_p5 td.row_title {
-	width: 190px;
-	padding-right: 20px !important;
-	font-weight: bold;
-	text-align: right;
-}
-.ips_pkgview_p5 .logo_icon {
-	padding: 2px;
-	outline: #ccc 1px solid;
-}
-.ips_pkgview_p5 .ips-ipmls {
-	padding-right: 5px;
-}
-.ips_pkgview_p5 .ips-ipmls td {
-	font-size: 0.9em;
-}
-.ips_pkgview_p5 .ips-ipmls th,
-.ips_pkgview_p5 .ips-ipmls td {
-	padding: 3px 0;
-}
+  .ips_pkgview_p5 td {
+    padding: 5px 0;
+  }
+
+  .ips_pkgview_p5 .logo_icon {
+    padding: 2px;
+    outline: #ccc 1px solid;
+  }
+
+  .ips_pkgview_p5 .ips-ipmls {
+    padding-right: 5px;
+  }
+
+  .ips_pkgview_p5 .ips-ipmls td {
+    font-size: 0.9em;
+  }
+
+  .ips_pkgview_p5 .ips-ipmls th,
+  .ips_pkgview_p5 .ips-ipmls td {
+    padding: 3px 0;
+  }
 </style>
 
-<table class="ips_pkgview_p5" width="100%">
+<table class="valueui-formtable" width="100%">
 
-<tr>
-  <td class="row_title">Maintainer</td>
-  <td>{[=it.meta.user]}</td>
-</tr>
+  <tr>
+    <td width="200px">Maintainer</td>
+    <td>{[=it.meta.user]}</td>
+  </tr>
 
-<tr>
-  <td class="row_title">Updated</td>
-  <td>
-    {[=valueui.utilx.unixMillisecondFormat(it.meta.updated, "Y-m-d")]}
-  </td>
-</tr>
+  <tr>
+    <td>Updated</td>
+    <td>
+      {[=valueui.utilx.unixMillisecondFormat(it.meta.updated, "Y-m-d")]}
+    </td>
+  </tr>
 
-<tr>
-  <td class="row_title">Groups</td>
-  <td>
-  {[~it.groups :vg]}
-    {[~it._groups :g]}
-    {[if (vg == g.name) {]}
-      <div>{[=g.value]}</div>
-    {[}]}
-    {[~]}
-  {[~]}
-  </td>
-</tr>
-
-
-<tr>
-  <td class="row_title">Logo</td>
-  <td>
-    <table width="80%">
-      <tr>
-        <td width="40%">
-          <img class="logo_icon" src="{[=it._api_url]}/pkg-info/icon?name={[=it.meta.name]}&type=11&size=96" width="96", height="96">
-		  1 x 1
-        </td>
-        <td>
-          <img class="logo_icon" src="{[=it._api_url]}/pkg-info/icon?name={[=it.meta.name]}&type=21&size=192" width="192", height="96">
-		  2 x 1
-        </td>
-      </tr>
-    </table>
-  </td>
-</tr>
-
-
-{[? it.project.homepage]}
-<tr>
-  <td class="row_title">Homepage</td>
-  <td><a href="{[=it.project.homepage]}" target="_blank">{[=it.project.homepage]}</a></td>
-</tr>
-{[?]}
-
-
-{[? it.project.description]}
-<tr>
-  <td class="row_title">Description</td>
-  <td>{[=it.project.description]}</td>
-</tr>
-{[?]}
-
-
-{[if (it._packages.length > 0) {]}
-<tr>
-  <td class="row_title" valign="top">Packages</td>
-
-  <td class="ips-ipmls">
-    <table class="table table-hover">
-      <thead><tr>
-        <th>Version</th>
-        <th>Release</th>
-        <th>Dist</th>
-        <th style="text-align:center">Arch</th>
-        <th style="text-align:right">Size</th>
-        <th style="text-align:right">Built</th>
-      </tr></thead>
-      <tbody>
-      {[~it._packages :v]}
-      <tr>
-        <td>{[=v.version.version]}</td>
-        <td>{[=v.version.release]}</td>
-        <td>{[=v.version.dist]}</td>
-		    <td align="center">{[=v.version.arch]}</td>
-        <td align="right">{[=inpack.UtilResourceSizeFormat(v.size, 2)]}</td>
-        <td align="right">{[=valueui.utilx.unixMillisecondFormat(v.built, "Y-m-d")]}</td>
-      </tr>
+  <tr>
+    <td>Groups</td>
+    <td>
+      {[~it.groups :vg]}
+      {[~it._groups :g]}
+      {[if (vg == g.name) {]}
+      <span class="badge rounded-pill bg-dark">{[=g.value]}</span>
+      {[}]}
       {[~]}
-      </tbody>
-    </table>
-  </td>
-</tr>
-{[}]}
+      {[~]}
+    </td>
+  </tr>
+
+
+  <tr>
+    <td>Logo</td>
+    <td>
+      <table width="80%">
+        <tr>
+          <td width="40%">
+            <img class="logo_icon" src="{[=it._api_url]}/pkg-info/icon?name={[=it.meta.name]}&type=11&size=96"
+              width="96" , height="96">
+            1 x 1
+          </td>
+          <td>
+            <img class="logo_icon" src="{[=it._api_url]}/pkg-info/icon?name={[=it.meta.name]}&type=21&size=192"
+              width="192" , height="96">
+            2 x 1
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+
+  {[? it.project.homepage]}
+  <tr>
+    <td>Homepage</td>
+    <td><a href="{[=it.project.homepage]}" target="_blank">{[=it.project.homepage]}</a></td>
+  </tr>
+  {[?]}
+
+
+  {[? it.project.description]}
+  <tr>
+    <td>Description</td>
+    <td>{[=it.project.description]}</td>
+  </tr>
+  {[?]}
+
+
+  {[if (it._packages.length > 0) {]}
+  <tr>
+    <td valign="top">Packages</td>
+
+    <td class="ips-ipmls">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>Release</th>
+            <th>Dist</th>
+            <th style="text-align:center">Arch</th>
+            <th style="text-align:right">Size</th>
+            <th style="text-align:right">Built</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[~it._packages :v]}
+          <tr>
+            <td>{[=v.version.version]}</td>
+            <td>{[=v.version.release]}</td>
+            <td>{[=v.version.dist]}</td>
+            <td align="center">{[=v.version.arch]}</td>
+            <td align="right">{[=inpack.UtilResourceSizeFormat(v.size, 2)]}</td>
+            <td align="right">{[=valueui.utilx.unixMillisecondFormat(v.built, "Y-m-d")]}</td>
+          </tr>
+          {[~]}
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  {[}]}
 
 </table>

@@ -1,37 +1,47 @@
-
-<div id="ips-pkgset-404" class="alert alert-danger" style="display:none">
+<div id="ips-pkgset-404" class="alert alert-danger" style="display: none">
   <p>No Package Found</p>
-  <button type="button" class="btn btn-default btn-sm" onclick="valueui.modal.close()">Close</button>
+  <button type="button" class="btn btn-default btn-sm" onclick="valueui.modal.close()">
+    Close
+  </button>
 </div>
 
-<div id="ips-pkgset" style="box-sizing: border-box;">loading</div>
+<div id="ips-pkgset" style="box-sizing: border-box">loading</div>
 
 <script id="ips-pkgset-tpl" type="text/html">
-  <div id="ips-pkgset-alert" class="alert alert-danger hide">...</div>
-  <input type="hidden" name="id" value="{[=it.pkg.meta.id]}">
+<div id="ips-pkgset-alert" class="alert alert-danger hide">...</div>
+<input type="hidden" name="id" value="{[=it.pkg.meta.id]}" />
+<table class="valueui-formtable">
+  <tbody>
 
-  <div class="valueui-form-group">
-    <label>Package</label>
-    <p>{[=it.pkg.meta.name]}</p>
-  </div>
+    <tr>
+      <td width="300px">Package</td>
+      <td>{[=it.pkg.meta.name]}</td>
+    </tr>
 
-  <div class="valueui-form-group">
-    <label>Select a Channel</label>
-    <select class="valueui-form-control" name="channel">
-    {[~it.channels.items :v]}
-      <option value="{[=v.meta.name]}" {[if (v.meta.name == it.pkg.channel) { ]}selected{[ } ]}>{[=v.vendor_name]} / {[=v.meta.name]}</option>
-    {[~]}
-    </select>
-  </div>
+    <tr>
+      <td>Select a Channel</td>
+      <td>
+        <select class="valueui-form-control" name="channel">
+          {[~it.channels.items :v]}
+          <option value="{[=v.meta.name]}" {[if (v.meta.name==it.pkg.channel) { ]}selected{[ } ]}>{[=v.vendor_name]} /
+            {[=v.meta.name]}</option>
+          {[~]}
+        </select>
+      </td>
+    </tr>
 
-  <div class="form-group">
-    <label>Status</label>
-    <div>
-    {[~it.actives :v]}
-      <span class="ips-form-checkbox checkbox-inline">
-        <input type="radio" name="op_perm_active" value="{[=v.value]}" {[ if (v.action) { ]}checked="checked"{[ } ]}> {[=v.name]}
-      </span>
-    {[~]}
-    </div>
-  </div>
+    <tr>
+      <td>Status</td>
+      <td>
+        {[~it.actives :v]}
+        <span class="ips-form-checkbox checkbox-inline">
+          <input type="radio" name="op_perm_active" value="{[=v.value]}" {[ if (v.action) { ]}checked="checked" {[ } ]}>
+          {[=v.name]}
+        </span>
+        {[~]}
+      </td>
+    </tr>
+
+  </tbody>
+</table>
 </script>

@@ -23,7 +23,7 @@
 
 
 <script id="ips-infols-s6r-grpnav-tpl" type="text/html">
-<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+<a class="dropdown-toggle" data-bs-toggle="dropdown" href="#">
   <span id="ips-infols-qry-grpvalue">{[=it.grpvalue]}</span> <span class="caret"></span>
 </a>
 <ul class="dropdown-menu">
@@ -91,7 +91,7 @@ function _ips_infols_pkgselect(name)
         id     : "ips-infols-s6r-pkgls",
         title  : "Select a Package to Launch",
         tpluri : "/in/~/ips/tpl/pkg/selector.html",
-        fn_selector : l4iModal.CurOptions.fn_selector,
+        fn_selector : valueui.modal.CurOptions.fn_selector,
         callback: function() {
             // $("#ips-pkgls-s6r-qry-name").val(name);
             inpack.PackListRefresh("ips-pkgls-s6r", name);

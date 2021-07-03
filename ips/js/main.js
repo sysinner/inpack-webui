@@ -334,7 +334,7 @@ inpack.InfoPackList = function (name) {
 inpack.InfoListGroupSelector = function () {
     valueui.modal.open({
         title: "Select Group",
-        width: 960,
+        width: 1200,
         height: "max",
         tplid: "ips-infols-grp-selector-tpl",
         data: inpack.cc_groups,
@@ -376,8 +376,8 @@ inpack.InfoSet = function (name) {
 
         valueui.modal.open({
             title: "Package Info Settings",
-            width: 800,
-            height: 450,
+            width: 1200,
+            height: 600,
             tplsrc: tpl,
             callback: function () {
                 valueui.template.render({
@@ -483,7 +483,7 @@ inpack.InfoView = function (name) {
 
             valueui.modal.open({
                 title: "Pack Info : " + data.meta.name,
-                width: 900,
+                width: 1200,
                 height: 600,
                 tplsrc: tpl,
                 data: data,
@@ -752,8 +752,8 @@ inpack.PackListRefresh = function (tplid, pkgname, optools_off) {
 inpack.PackListChannelSelector = function () {
     valueui.modal.open({
         title: "Select Channel",
-        width: 900,
-        height: 300,
+        width: 1200,
+        height: 400,
         tplid: "ips-pkgls-chans-selector-tpl",
         data: {
             items: inpack.cc_channels.items,
@@ -815,8 +815,8 @@ inpack.PackSet = function (id) {
 
         valueui.modal.open({
             title: "Package Settings",
-            width: 600,
-            height: 400,
+            width: 900,
+            height: 450,
             tplsrc: tpl,
             callback: function () {
                 valueui.template.render({

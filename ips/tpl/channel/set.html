@@ -4,79 +4,106 @@
 <div class="card">
   <div class="card-header">{[=it.actionTitle]}</div>
   <div class="card-body">
+    <div id="ips-channelset-alert" class="alert alert-danger hide">...</div>
+    <table class="valueui-formtable">
+      <tbody>
+        <tr>
+          <td width="300px">Channel Name</td>
+          <td>
+            {[if (it.channel.meta.name.length > 0) {]}
+            <input type="text" name="name" class="form-control" value="{[=it.channel.meta.name]}" readonly />
+            {[} else {]}
+            <input type="text" name="name" class="form-control" placeholder="Enter Channel Name" value="" />
+            <div class="form-text">
+              Use a <strong>short</strong>, easily identifiable name. Example:
+              beta, alpha, stable...
+            </div>
+            {[}]}
+          </td>
+        </tr>
 
-  <div id="ips-channelset-alert" class="alert alert-danger hide">...</div>
+        <tr>
+          <td>Vendor Name</td>
+          <td>
+            <input type="text" name="vendor_name" class="form-control" placeholder="Enter Vendor Name"
+              value="{[=it.channel.vendor_name]}" />
 
-  <div class="valueui-form-group">
-    <label>Channel Name</label>
-    {[if (it.channel.meta.name.length > 0) {]}
-    <input type="text" name="name" class="form-control" value="{[=it.channel.meta.name]}" readonly>
-    {[} else {]}
-    <input type="text" name="name" class="form-control" placeholder="Enter Channel Name" value="">
-    <p class="help-block">Use a <strong>short</strong>, easily identifiable name. Example: beta, alpha, stable...</p>
-    {[}]}
-  </div>
+            <div class="form-text">
+              Company or organization name. Use a <strong>short</strong>, easily
+              identifiable name
+            </div>
+          </td>
+        </tr>
 
-  <div class="valueui-form-group">
-    <label>Vendor Name</label>
-    <input type="text" name="vendor_name" class="form-control" placeholder="Enter Vendor Name" value="{[=it.channel.vendor_name]}">
-    <p class="help-block">Company or organization name. Use a <strong>short</strong>, easily identifiable name</p>
-  </div>
-
-  <!-- <div class="form-group">
-    <label>Vendor Website URL</label>
+        <!-- <div class="form-group">
+    <td>Vendor Website URL</td>
     <input type="text" name="vendor_site" class="form-control" placeholder="Enter Vendor Website URL" value="{[=it.channel.vendor_site]}">
-    <p class="help-block">The website url of your organization. Example: http://www.example.com</p>
+    <p class="form-text">The website url of your organization. Example: http://www.example.com</p>
   </div>
 
   <div class="form-group">
-    <label>Package Service URL</label>
+    <td>Package Service URL</td>
     <input type="text" name="vendor_api" class="form-control" placeholder="Enter Package Service URL" value="{[=it.channel.vendor_api]}">
   </div> -->
 
-  <div class="valueui-form-group">
-    <label>Readable Roles</label>
-    <div>
-      <span style="margin-right:10px">
-        <input type="checkbox" name="" value="0" checked="checked" disabled> Owner
-      </span>
-      {[~it.channel._roles :v]}
-      <span style="margin-right:10px">
-        {[if (v.read_checked) {]}
-        <input type="checkbox" name="roles_read" value="{[=v.id]}" checked="checked"> {[=v.name]}
-        {[} else {]}
-        <input type="checkbox" name="roles_read" value="{[=v.id]}"> {[=v.name]}
-        {[}]}
-      </span>
-      {[~]}
-    </div>
-  </div>
+        <tr>
+          <td>Readable Roles</td>
+          <td>
+            <span style="margin-right: 10px">
+              <input type="checkbox" name="" value="0" checked="checked" disabled />
+              Owner
+            </span>
+            {[~it.channel._roles :v]}
+            <span style="margin-right: 10px">
+              {[if (v.read_checked) {]}
+              <input type="checkbox" name="roles_read" value="{[=v.id]}" checked="checked" />
+              {[=v.name]} {[} else {]}
+              <input type="checkbox" name="roles_read" value="{[=v.id]}" />
+              {[=v.name]} {[}]}
+            </span>
+            {[~]}
+          </td>
+        </tr>
 
-  <div class="valueui-form-group">
-    <label>Writable Roles</label>
-    <div>
-      <span style="margin-right:10px">
-        <input type="checkbox" name="" value="0" checked="checked" disabled> Owner
-      </span>
-      {[~it.channel._roles :v]}
-      <span style="margin-right:10px">
-        {[if (v.write_checked) {]}
-        <input type="checkbox" name="roles_write" value="{[=v.id]}" checked="checked"> {[=v.name]}
-        {[} else {]}
-        <input type="checkbox" name="roles_write" value="{[=v.id]}"> {[=v.name]}
-        {[}]}
-      </span>
-      {[~]}
-    </div>
-  </div>
+        <tr>
+          <td>Writable Roles</td>
+          <td>
+            <span style="margin-right: 10px">
+              <input type="checkbox" name="" value="0" checked="checked" disabled />
+              Owner
+            </span>
+            {[~it.channel._roles :v]}
+            <span style="margin-right: 10px">
+              {[if (v.write_checked) {]}
+              <input type="checkbox" name="roles_write" value="{[=v.id]}" checked="checked" />
+              {[=v.name]} {[} else {]}
+              <input type="checkbox" name="roles_write" value="{[=v.id]}" />
+              {[=v.name]} {[}]}
+            </span>
+            {[~]}
+          </td>
+        </tr>
 
-  <button type="submit" class="btn btn-primary" onclick="inpack.ChannelSetCommit()">Save</button>
+        <tr>
+          <td>
 
-  {[if (it.channel.pkgNum == 0) { ]}
-  <a href="#" onclick="inpack.ChannelDelete('{[=it.channel.meta.name]}')" class="btn btn-default" style="margin-left:20px">Delete</a>
-  {[ } ]}
+          </td>
+          <td>
+            <button type="submit" class="btn btn-primary" onclick="inpack.ChannelSetCommit()">
+              Save
+            </button>
 
-  <a href="#" onclick="inpack.ChannelListRefresh()" style="margin-left:20px">Cancel</a>
+            {[if (it.channel.pkgNum == 0) { ]}
+            <a href="#" onclick="inpack.ChannelDelete('{[=it.channel.meta.name]}')" class="btn btn-default"
+              style="margin-left: 20px">Delete</a>
+            {[ } ]}
+
+            <a href="#" onclick="inpack.ChannelListRefresh()" style="margin-left: 20px">Cancel</a>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
 
   </div>
 </div>
